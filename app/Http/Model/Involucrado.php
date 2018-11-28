@@ -11,6 +11,30 @@ namespace App\Http\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Http\Model\Involucrado
+ *
+ * @property-read \App\Http\Model\Proceso $proceso
+ * @property-read \App\Http\Model\Profesor $profesor
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Involucrado newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Involucrado newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Involucrado query()
+ * @mixin \Eloquent
+ * @property int $id
+ * @property string $rol
+ * @property string $enterado
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $fk_id_proceso
+ * @property int $fk_id_profesor
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Involucrado whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Involucrado whereEnterado($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Involucrado whereFkIdProceso($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Involucrado whereFkIdProfesor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Involucrado whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Involucrado whereRol($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Involucrado whereUpdatedAt($value)
+ */
 class Involucrado extends Model
 {
 
