@@ -11,6 +11,67 @@
 |
 */
 
+//==========================================
+//               Login
+//===========================================
+
+
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('login');
+})->name('login');
+
+Route::post('login/auth',
+    'Auth\LoginController@authenticate')
+    ->name('login_auth');
+
+Route::get(
+    'logout',
+    'Auth\LoginController@logout'
+)->name('logout');
+
+//==========================================
+//               Alumnos
+//===========================================
+Route::get(
+    'student/revision',
+    'AlumnoController@revision'
+)->name('student_revision');
+
+Route::post(
+    'student/revision',
+    'AlumnoController@revisionPost'
+)->name('student_revision_post');
+
+
+//==========================================
+//               Admin
+//===========================================
+
+Route::get(
+    'admin/main',
+    'AdminController@index'
+)->name('admin_index');
+
+Route::get(
+    'admin/process/{processId}/view',
+    'AdminController@getProcess'
+)->name('get_process');
+
+Route::get(
+    'admin/process/{processId}/update',
+    'AdminController@updateProcess'
+)->name('update_process');
+
+Route::post(
+    'admin/process/{processId}/update',
+    'AdminController@updateProcessPost'
+)->name('update_process_post');
+
+Route::get(
+    'teachers',
+    'AdminController@getTeachers'
+)->name('get_teachers');
+
+
+
+

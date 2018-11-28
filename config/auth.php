@@ -45,8 +45,17 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
-    ],
 
+        'profesor' => [
+            'driver' => 'session',
+            'provider' => 'profesores',
+        ],
+
+        'alumno' => [
+            'driver' => 'session',
+            'provider' => 'alumnos',
+        ],
+    ],
     /*
     |--------------------------------------------------------------------------
     | User Providers
@@ -65,11 +74,20 @@ return [
     */
 
     'providers' => [
+
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
         ],
 
+        'profesores' => [
+            'driver' => 'eloquent',
+            'model' => App\Http\Model\Profesor::class,
+        ],
+        'alumnos' => [
+            'driver' => 'eloquent',
+            'model' => App\Http\Model\Alumno::class,
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

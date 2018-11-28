@@ -21,7 +21,6 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property int $id
  * @property int $no_revision
- * @property string $fecha_entrega
  * @property string $comentarios
  * @property string $documento_url
  * @property \Illuminate\Support\Carbon|null $created_at

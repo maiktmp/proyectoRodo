@@ -9,7 +9,9 @@
 namespace App\Http\Model;
 
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
 
 /**
  * App\Http\Model\Alumno
@@ -40,10 +42,13 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Alumno whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Alumno whereUsuario($value)
  */
-class Alumno extends Model
+class Alumno  extends Authenticatable
 {
+    use Notifiable;
 
     protected $table = "alumno";
+
+    protected $hidden = ['password',  'remember_token'];
 
     public function proceso()
     {

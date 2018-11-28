@@ -9,7 +9,10 @@
 namespace App\Http\Model;
 
 
-use Illuminate\Database\Eloquent\Model;
+use DB;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
 
 /**
  * App\Http\Model\Profesor
@@ -43,9 +46,16 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Profesor whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Profesor whereUsuario($value)
  */
-class Profesor extends Model
+class Profesor extends Authenticatable
 {
+    use Notifiable;
     protected $table = 'profesor';
+
+    protected $fillable = [
+        'usuario', 'password',
+    ];
+
+    protected $hidden = ['password', 'remember_token'];
 
     public function revisionesAsesor()
     {
@@ -83,4 +93,10 @@ class Profesor extends Model
         );
     }
 
+    public static function UserasMap()
+    {
+        return self::select(
+            DB::raw("CONCAT(nombre,' ',apellidop,' ',apellidom) AS name"), 'id')
+            ->pluck('name', 'id');
+    }
 }

@@ -24,10 +24,10 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
         Schema::create('revision_alumno', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('no_revision');
-            $table->date('fecha_entrega');
             $table->string('comentarios', 1000);
             $table->string('documento_url', 1000);
             $table->timestamps();
@@ -49,8 +49,12 @@ class CreateUsersTable extends Migration
             $table->integer('no_asesor');
             $table->integer('sancion');
             $table->date('ultima_revision');
-            $table->rememberToken();
             $table->timestamps();
+            $table->unsignedInteger('fk_id_profesor');
+
+            $table->foreign('fk_id_profesor')
+                ->references('id')
+                ->on('profesor');
         });
         Schema::create('proceso', function (Blueprint $table) {
             $table->increments('id');
@@ -58,7 +62,11 @@ class CreateUsersTable extends Migration
             $table->string('estado');
             $table->timestamps();
             $table->unsignedInteger('fk_id_alumno');
+            $table->unsignedInteger('fk_id_revision_alumno');
 
+            $table->foreign('fk_id_revision_alumno')
+                ->references('id')
+                ->on('revision_alumno');
             $table->foreign('fk_id_alumno')
                 ->references('id')
                 ->on('alumno');
