@@ -29,7 +29,8 @@
                         </div>
                         <div class="row">
                             <div class="col-8 offset-2 text-center">
-                                @include('components.form.text_group', [
+                                @include('components.form.password_group', [
+                                    'update'=>false,
                                       'name' => 'password',
                                       'label' => 'Contraseña',
                                       'labelClass' => 'text-bold',
