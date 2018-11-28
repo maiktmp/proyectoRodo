@@ -1,0 +1,29 @@
+.nav-link {
+    color: white !important;
+}
+
+.wrapper {
+    display: flex;
+    align-items: stretch;
+    height: calc(100% - 60px - 50px);
+}
+
+#content {
+    background: white;
+}
+.body{
+    background-color: #EAEAEA;
+}
+
+.portal-footer{
+    padding: 15px 0;
+    color: #999;
+    text-align: center;
+
+    /*background-color: #f9f9f9;*/
+    border-top: 1px solid #e5e5e5;
+}
+
+.portal-footer p:last-child {
+    margin-bottom: 0;
+}
