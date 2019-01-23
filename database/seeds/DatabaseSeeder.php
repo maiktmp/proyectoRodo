@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Faker\Generator as Faker;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,66 +12,79 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('alumno')->insert(
+        DB::table('user_type')->insert([
+            ['name' => 'Administrador'],
+            ['name' => 'Alumno'],
+            ['name' => 'Profesor'],
+        ]);
+        $faker = \Faker\Factory::create('es_MX');
+        DB::table('user')->insert([
             [
-                'nombre' => 'Alejandro',
-                'apellidoP' => 'Gomez',
-                'apellidoM' => 'Leiva',
-                'correo' => 'alejandro@gmail.com',
-                'usuario' => 'alu_14280487',
+                'name' => 'Miguel',
+                'last_name' => 'Pereira Suarez',
+                'username' => 'alu_14280487',
                 'password' => bcrypt('pw0000'),
-            ]
-        );
+                'email' => "aluItt@ittol.com.mx",
+                'fk_id_user_type' => "2",
+            ],
+            [
+                'name' => $faker->firstName,
+                'last_name' => $faker->lastName,
+                'username' => 'profe_1234',
+                'password' => bcrypt('pw0000'),
+                'email' => "profe1Itt@ittol.com.mx",
+                'fk_id_user_type' => "3",
+            ],
+            [
+                'name' => $faker->firstName,
+                'last_name' => $faker->lastName,
+                'username' => 'profe_456',
+                'password' => bcrypt('pw0000'),
+                'email' => "profe2Itt@ittol.com.mx",
+                'fk_id_user_type' => "3",
+            ],
+            [
+                'name' => $faker->firstName,
+                'last_name' => $faker->lastName,
+                'username' => 'profe_789',
+                'password' => bcrypt('pw0000'),
+                'email' => "profe3Itt@ittol.com.mx",
+                'fk_id_user_type' => "3",
+            ],
+            [
+                'name' => $faker->firstName,
+                'last_name' => $faker->lastName,
+                'username' => 'profe_741',
+                'password' => bcrypt('pw0000'),
+                'email' => "profe4Itt@ittol.com.mx",
+                'fk_id_user_type' => "3",
+            ],
+            [
+                'name' => $faker->firstName,
+                'last_name' => $faker->lastName,
+                'username' => 'profe_852',
+                'password' => bcrypt('pw0000'),
+                'email' => "profe5Itt@ittol.com.mx",
+                'fk_id_user_type' => "3",
+            ],
+            [
+                'name' => $faker->firstName,
+                'last_name' => $faker->lastName,
+                'username' => 'profe_963',
+                'password' => bcrypt('pw0000'),
+                'email' => "profe6Itt@ittol.com.mx",
+                'fk_id_user_type' => "3",
+            ],
+            [
+                'name' => $faker->firstName,
+                'last_name' => $faker->lastName,
+                'username' => 'admin',
+                'password' => bcrypt('pw0000'),
+                'email' => "admin@ittol.com.mx",
+                'fk_id_user_type' => "1",
+            ],
+        ]);
 
-        DB::table('revision_alumno')->insert(
-            [
-                'no_revision' => '1',
-                'comentarios' => 'Esta es mi primer versión, saludos',
-                'documento_url' => '/docx/students1/version_2_2018/11/28docx'
-            ]
-        );
-
-        DB::table('proceso')->insert(
-            [
-                'opcion_tit' => 'Titulación',
-                'estado' => 'Sin asignar',
-                'created_at' => Carbon\Carbon::now()->subWeek(3),
-                'updated_at' => Carbon\Carbon::now()->subWeek(3),
-                'fk_id_alumno' => 1,
-                'fk_id_revision_alumno' => 1
-            ]
-        );
-
-        DB::table('profesor')->insert(
-            [
-                'nombre' => 'Navarro',
-                'apellidoP' => 'Aguilar',
-                'apellidoM' => 'Reyes',
-                'correo' => 'navarro@gmail.com',
-                'usuario' => 'profesor_123456',
-                'password' => bcrypt('pw0000'),
-            ]
-        );
-        DB::table('profesor')->insert(
-            [
-                'nombre' => 'Alejandra',
-                'apellidoP' => 'Castillo',
-                'apellidoM' => 'Reyes',
-                'correo' => 'alejandrao@gmail.com',
-                'usuario' => 'profesor_321654',
-                'password' => bcrypt('pw0000'),
-            ]
-        );
-        DB::table('profesor')->insert(
-            [
-                'nombre' => \Faker\Provider\Person::firstNameFemale(),
-                'apellidoP' => 'Flores',
-                'apellidoM' => 'Reyes',
-                'correo' => 'alejandra@gmail.com',
-                'usuario' => 'profesor_9632',
-                'password' => bcrypt('pw0000'),
-            ]
-        );
 
     }
 }

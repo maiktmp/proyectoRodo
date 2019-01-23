@@ -19,11 +19,11 @@
                         <div class="row mt-2">
                             <div class="col-8 offset-2 text-center">
                                 @include('components.form.text_group', [
-                                      'name' => 'usuario',
+                                      'name' => 'username',
                                       'label' => 'Usuario',
                                       'labelClass' => 'text-bold',
                                       'errors' => $errors,
-                                      'errorName' => 'usuario'
+                                      'errorName' => 'username'
                                   ])
                             </div>
                         </div>

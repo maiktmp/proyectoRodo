@@ -13,133 +13,126 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('alumno', function (Blueprint $table) {
+        Schema::create('user_type', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre');
-            $table->string('apellidoP');
-            $table->string('apellidoM');
-            $table->string('correo');
-            $table->string('usuario');
+            $table->string('name');
+        });
+
+        Schema::create('user', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('last_name');
+            $table->string('username');
             $table->string('password');
+            $table->string('email');
             $table->rememberToken();
             $table->timestamps();
+            $table->unsignedInteger('fk_id_user_type');
+
+            $table->foreign('fk_id_user_type')
+                ->references('id')
+                ->on('user_type');
         });
 
-        Schema::create('revision_alumno', function (Blueprint $table) {
+        Schema::create('process', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('no_revision');
-            $table->string('comentarios', 1000);
-            $table->string('documento_url', 1000);
+            $table->date('begin_date');
+            $table->date('state_date');
             $table->timestamps();
         });
-        Schema::create('profesor', function (Blueprint $table) {
+
+        Schema::create('rol', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre');
-            $table->string('apellidoP');
-            $table->string('apellidoM');
-            $table->string('correo');
-            $table->string('usuario');
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
         });
-        Schema::create('historial_profesor', function (Blueprint $table) {
+
+        Schema::create('state', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('no_revisor');
-            $table->integer('no_asesor');
-            $table->integer('sancion');
-            $table->date('ultima_revision');
-            $table->timestamps();
-            $table->unsignedInteger('fk_id_profesor');
-
-            $table->foreign('fk_id_profesor')
-                ->references('id')
-                ->on('profesor');
+            $table->string('nombre');
         });
-        Schema::create('proceso', function (Blueprint $table) {
+
+        Schema::create('action', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('opcion_tit');
-            $table->string('estado');
-            $table->timestamps();
-            $table->unsignedInteger('fk_id_alumno');
-            $table->unsignedInteger('fk_id_revision_alumno');
-
-            $table->foreign('fk_id_revision_alumno')
-                ->references('id')
-                ->on('revision_alumno');
-            $table->foreign('fk_id_alumno')
-                ->references('id')
-                ->on('alumno');
-
+            $table->string('nombre');
         });
-        Schema::create('revision_asesor', function (Blueprint $table) {
+
+        Schema::create('position', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('no_revision');
-            $table->string('comentarios', 1000);
-            $table->boolean('postura');
-            $table->timestamps();
-            $table->unsignedInteger('fk_id_proceso');
-            $table->unsignedInteger('fk_id_profesor');
-
-            $table->foreign('fk_id_profesor')
-                ->references('id')
-                ->on('profesor');
-            $table->foreign('fk_id_proceso')
-                ->references('id')
-                ->on('proceso');
-
+            $table->string('nombre');
         });
-        Schema::create('involucrado', function (Blueprint $table) {
+
+        Schema::create('process_has_state', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('rol');
-            $table->string('enterado');
             $table->timestamps();
-            $table->unsignedInteger('fk_id_proceso');
-            $table->unsignedInteger('fk_id_profesor');
+            $table->unsignedInteger('fk_id_state');
+            $table->unsignedInteger('fk_id_process');
 
-            $table->foreign('fk_id_profesor')
+            $table->foreign('fk_id_state')
                 ->references('id')
-                ->on('profesor');
-
-            $table->foreign('fk_id_proceso')
+                ->on('state');
+            $table->foreign('fk_id_process')
                 ->references('id')
-                ->on('proceso');
-
+                ->on('process');
         });
-        Schema::create('revision_revisor', function (Blueprint $table) {
+
+        Schema::create('process_has_action', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('no_revision');
-            $table->date('fecha_limite');
-            $table->date('fecha_entrega');
-            $table->string('comentarios', 1000);
-            $table->boolean('postura');
-            $table->string('documento_url', 1000);
-
             $table->timestamps();
-            $table->unsignedInteger('fk_id_proceso');
-            $table->unsignedInteger('fk_id_profesor');
+            $table->unsignedInteger('fk_id_action');
+            $table->unsignedInteger('fk_id_process');
 
-            $table->foreign('fk_id_profesor')
+            $table->foreign('fk_id_action')
                 ->references('id')
-                ->on('profesor');
-
-            $table->foreign('fk_id_proceso')
+                ->on('action');
+            $table->foreign('fk_id_process')
                 ->references('id')
-                ->on('proceso');
-
+                ->on('process');
         });
-        Schema::create('acciones', function (Blueprint $table) {
+
+        Schema::create('process_has_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('accion');
+            $table->date('delivery_date');
             $table->timestamps();
-            $table->unsignedInteger('fk_id_involucrado');
+            $table->unsignedInteger('fk_id_user');
+            $table->unsignedInteger('fk_id_process');
+            $table->unsignedInteger('fk_id_rol');
 
-            $table->foreign('fk_id_involucrado')
+            $table->foreign('fk_id_user')
                 ->references('id')
-                ->on('involucrado');
+                ->on('user');
+            $table->foreign('fk_id_process')
+                ->references('id')
+                ->on('process');
+            $table->foreign('fk_id_rol')
+                ->references('id')
+                ->on('rol');
 
         });
 
+        Schema::create('document', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('no_document');
+            $table->boolean('approved')->default(false);
+        });
+
+        Schema::create('process_has_document', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('comments', 1000);
+            $table->timestamps();
+            $table->unsignedInteger('fk_id_document');
+            $table->unsignedInteger('fk_id_position');
+            $table->unsignedInteger('fk_id_process_has_user');
+
+            $table->foreign('fk_id_process_has_user')
+                ->references('id')
+                ->on('process_has_user');
+            $table->foreign('fk_id_document')
+                ->references('id')
+                ->on('document');
+            $table->foreign('fk_id_position')
+                ->references('id')
+                ->on('position');
+        });
 
     }
 
@@ -150,14 +143,17 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('acciones');
-        Schema::dropIfExists('revision_revisor');
-        Schema::dropIfExists('involucrado');
-        Schema::dropIfExists('revision_asesor');
-        Schema::dropIfExists('proceso');
-        Schema::dropIfExists('historial_profesor');
-        Schema::dropIfExists('profesor');
-        Schema::dropIfExists('revision_alumno');
-        Schema::dropIfExists('alumno');
+        Schema::dropIfExists('process_has_document');
+        Schema::dropIfExists('document');
+        Schema::dropIfExists('process_has_user');
+        Schema::dropIfExists('process_has_action');
+        Schema::dropIfExists('process_has_state');
+        Schema::dropIfExists('position');
+        Schema::dropIfExists('action');
+        Schema::dropIfExists('state');
+        Schema::dropIfExists('rol');
+        Schema::dropIfExists('process');
+        Schema::dropIfExists('user');
+        Schema::dropIfExists('user_type');
     }
 }

@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Model\Alumno;
-use App\Http\Model\Proceso;
-use App\Http\Model\Profesor;
 use Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -44,59 +41,37 @@ class LoginController extends Controller
 
     public function username()
     {
-        return 'usuario';
-    }
-
-    public function guard()
-    {
-        return Auth::guard('profesor');
+        return 'username';
     }
 
     public function authenticate(Request $request)
     {
-//        $profe = Profesor::find(1);
-//        $profe->password = bcrypt('1428');
-//        $profe->save();
-//
-//        $alu = Alumno::find(1);
-//        $alu->password = bcrypt('1428');
-//        $alu->save();
-
-
         $this->validate(
             $request,
             [
-                'usuario' => 'required',
+                'username' => 'required',
                 'password' => 'required'
             ],
             [
-                'usuario.required' => 'Ingrese un nombre de usuario',
+                'username.required' => 'Ingrese un nombre de usuario',
                 'password.required' => 'Ingrese una contraseña'
             ]
         );
 
         $remember = false;
         $loginParams = [
-            'usuario' => $request->input('usuario'),
+            'username' => $request->input('username'),
             'password' => $request->input('password')
         ];
-//        return dd($loginParams);
-        $teachLog = false;
-        $studentLog = false;
 
-        $teachLog = Auth::guard('profesor')->attempt($loginParams);
-        $studentLog = Auth::guard('alumno')->attempt($loginParams);
-
-        if ($studentLog) {
-            return redirect()->route('student_revision');
+        if (!Auth::attempt($loginParams, $remember)) {
+            redirect()->route('login')
+                ->withErrors((['username' => 'Usuario o contraseña incorrectos.']))
+                ->withInput($request->all());
         }
-        if ($teachLog) {
-            $profesor = Auth::guard('profesor')->user();
-            if ($profesor->id === 1) {
-                return redirect()->route('admin_index');
-            }
-        }
+        $user = Auth::user();
 
+        return dd(Auth::user());
     }
 
     public function logout(Request $request)

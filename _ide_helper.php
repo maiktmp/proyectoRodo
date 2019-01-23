@@ -13,6 +13,8 @@
 
 namespace Illuminate\Support\Facades {
 
+    use App\Http\Model\User;
+
     /**
      *
      *
@@ -1520,7 +1522,7 @@ namespace Illuminate\Support\Facades {
      * @method static void shouldUse(string $name);
      * @method static bool check()
      * @method static bool guest()
-     * @method static \Illuminate\Contracts\Auth\Authenticatable|null user()
+     * @method static User user()
      * @method static int|null id()
      * @method static bool validate(array $credentials = [])
      * @method static void setUser(\Illuminate\Contracts\Auth\Authenticatable $user)
