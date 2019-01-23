@@ -13,9 +13,45 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Http\Model\User
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $last_name
+ * @property string $username
+ * @property string $password
+ * @property string $email
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $fk_id_user_type
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Http\Model\ProcessHasUser[] $processHasUsers
+ * @property-read \App\Http\Model\UserType $userType
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User whereFkIdUserType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User whereUsername($value)
+ * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Http\Model\Document[] $documents
+ * @property-read mixed $full_name
+ */
 class User extends Authenticatable
 {
     protected $table = "user";
+
+    protected $appends = [
+        'full_name'
+    ];
 
     public function userType()
     {
@@ -33,5 +69,17 @@ class User extends Authenticatable
             'fk_id_user',
             'id'
         );
+    }
+    public function documents()
+    {
+        return $this->hasMany(
+            Document::class,
+            'fk_id_user',
+            'id'
+        );
+    }
+    public function getFullNameAttribute()
+    {
+        return $this->name . ' ' . $this->last_name;
     }
 }

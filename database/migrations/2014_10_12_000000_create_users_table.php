@@ -43,22 +43,27 @@ class CreateUsersTable extends Migration
 
         Schema::create('rol', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre');
+            $table->string('name');
         });
 
         Schema::create('state', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre');
+            $table->string('name');
         });
 
         Schema::create('action', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre');
+            $table->string('name');
         });
 
         Schema::create('position', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre');
+            $table->string('name');
+        });
+
+        Schema::create('status', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
         });
 
         Schema::create('process_has_state', function (Blueprint $table) {
@@ -112,7 +117,17 @@ class CreateUsersTable extends Migration
         Schema::create('document', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('no_document');
+            $table->string( 'url', 1000)->nullable();
             $table->boolean('approved')->default(false);
+            $table->unsignedInteger('fk_id_status');
+            $table->unsignedInteger('fk_id_user');
+
+            $table->foreign('fk_id_status')
+                ->references('id')
+                ->on('status');
+            $table->foreign('fk_id_user')
+                ->references('id')
+                ->on('user');
         });
 
         Schema::create('process_has_document', function (Blueprint $table) {
@@ -148,6 +163,7 @@ class CreateUsersTable extends Migration
         Schema::dropIfExists('process_has_user');
         Schema::dropIfExists('process_has_action');
         Schema::dropIfExists('process_has_state');
+        Schema::dropIfExists('status');
         Schema::dropIfExists('position');
         Schema::dropIfExists('action');
         Schema::dropIfExists('state');

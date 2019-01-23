@@ -9,17 +9,18 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Model\Document;
 use App\Http\Model\RevisionAlumno;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
 
-class AlumnoController extends Controller
+class StudentController extends Controller
 {
     public function revision()
     {
-        $alumno = Auth::guard('alumno')->user();
+        $alumno = Auth::user();
         return view('alumno.revision', [
             'alumno' => $alumno
         ]);
@@ -27,39 +28,40 @@ class AlumnoController extends Controller
 
     public function revisionPost(Request $request)
     {
-
         $validator = Validator::make(
             $request->all(),
             [
-                'documento_url' => 'required|mimes:doc,docx',
-                'comentarios' => 'max:1000,',
+                'url' => 'required|mimes:doc,docx',
+                'comments' => 'max:1000,',
 
             ],
             [
-                'documento_url.required' => 'Ingresa el docuento de word.',
-                'documento_url.mimetypes' => 'Ingresa un archivo de word.',
-                'comentarios.max' => 'Ingresa un comentario más pequeño',
+                'url.required' => 'Ingresa el docuento de word.',
+                'url.mimetypes' => 'Ingresa un archivo de word.',
+                'comments.max' => 'Ingresa un comentario más pequeño',
             ]
-        )->validate();
+        );
+        $validator->validate();
         try {
-            $alumno = Auth::guard('alumno')->user();
-            $revisionAlumno = new RevisionAlumno();
-            $revisionAlumno->no_revision = RevisionAlumno::all()->count() + 1;
-            $revisionAlumno->comentarios = $request->get('comentarios', "");
-            $revisionAlumno->documento_url = "temporal";
-            $transactionOk = $revisionAlumno->save();
+            $alumno = Auth::user();
+            $document = new Document();
+            $no_document = $alumno->documents()->count() > 0 ? $alumno->documents->count() : 1;
+            $document->no_document = $no_document;
+            $document->fk_id_user = $alumno->id;
+            $document->fk_id_status = 1;
+            $transactionOk = $document->save();
             if ($transactionOk) {
-                $fileOk = $request->hasFile('documento_url') &&
-                    $request->file('documento_url')->isValid();
+                $fileOk = $request->hasFile('url') &&
+                    $request->file('url')->isValid();
             }
             if ($fileOk) {
                 $docUrl = $this->storeDocx(
-                    $request->file('documento_url'),
+                    $request->file('url'),
                     $alumno->id,
-                    $revisionAlumno->no_revision
+                    $no_document
                 );
-                $revisionAlumno->documento_url = $docUrl;
-                $transactionOk = $transactionOk && $revisionAlumno->save();
+                $document->url = $docUrl;
+                $transactionOk = $transactionOk && $document->save();
             }
             if (!$transactionOk) {
                 $validator->getMessageBag()->add(
@@ -68,7 +70,7 @@ class AlumnoController extends Controller
                 );
                 return $this->returnCreateErrors($validator);
             }
-            return dd("p<s");
+            return dd("ok");
         } catch (\Exception $e) {
             $validator->getMessageBag()->add(
                 'general',
@@ -76,13 +78,12 @@ class AlumnoController extends Controller
             );
             return $this->returnCreateErrors($validator);
         }
-
     }
 
     private function storeDocx($file, $alumnoId, $noRevision)
     {
-        $path = '/docx/students' . $alumnoId;
-        $name = 'version_' . $noRevision . '_' . Carbon::now()->format('Y/m/d') . $file->extension();
+        $path = '/docx/student' . $alumnoId;
+        $name = 'version_' . $noRevision . '_' . Carbon::now()->format('Y/m/d') . "." . $file->extension();
 
         // Create path if does not exists
         if (!file_exists(public_path() . $path)) {

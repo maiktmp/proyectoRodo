@@ -1,5 +1,5 @@
 @php
-    /* @var  $alumno \App\Http\Model\Alumno*/
+    /* @var  $alumno \App\Http\Model\User*/
 @endphp
 @extends('template.main')
 @section('title', 'Revisiones')
@@ -11,7 +11,7 @@
             <div class="col-8 offset-2">
                 <div class="card my-3">
                     <div class="card-header text-center bg-primary">
-                        <h3 class="text-white">Revisión {{isset($revisionAlumno)?:'1'}}</h3>
+                        <h3 class="text-white">Revisión {{isset($document)?:'1'}}</h3>
                     </div>
                     <div class="row">
                         @if ($errors->has('general'))
@@ -26,7 +26,7 @@
                         <div class="row">
                             <div class="col">
                                 <div class="alert alert-primary text-center" role="alert">
-                                    Alumno
+                                    Alumno: {{$alumno->full_name}}
                                 </div>
                             </div>
                         </div>
@@ -36,22 +36,22 @@
                         <div class="row mt-2">
                             <div class="col-8 offset-2 text-left">
                                 @include('components.form.file_group', [
-                                      'name' => 'documento_url',
+                                      'name' => 'url',
                                       'label' => 'Documento',
-                                       'labelClass' => 'lbl-doc',
+                                      'labelClass' => 'lbl-doc',
                                       'errors' => $errors,
-                                      'errorName' => 'documento_url'
+                                      'errorName' => 'url'
                                   ])
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-8 offset-2 text-left">
                                 @include('components.form.textarea_group', [
-                                      'name' => 'comentarios',
+                                      'name' => 'comments',
                                       'label' => 'Comentarios',
                                       'rows'=>5,
                                       'errors' => $errors,
-                                      'errorName' => 'comentarios'
+                                      'errorName' => 'comments'
                                   ])
                             </div>
                         </div>

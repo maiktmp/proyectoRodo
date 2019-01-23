@@ -70,8 +70,10 @@ class LoginController extends Controller
                 ->withInput($request->all());
         }
         $user = Auth::user();
-
-        return dd(Auth::user());
+        if ($user->userType->id === 2) {
+            return redirect()->route('student_revision');
+        }
+        return dd(Auth::user()->userType);
     }
 
     public function logout(Request $request)

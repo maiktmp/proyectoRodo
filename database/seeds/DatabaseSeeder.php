@@ -17,6 +17,14 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Alumno'],
             ['name' => 'Profesor'],
         ]);
+        DB::table('status')->insert([
+            ['name' => 'Pendiente'],
+            ['name' => 'En revisión'],
+            ['name' => 'Rechazado por el asesor'],
+            ['name' => 'Rechazado por revisor'],
+            ['name' => 'Aceptado'],
+        ]);
+
         $faker = \Faker\Factory::create('es_MX');
         DB::table('user')->insert([
             [

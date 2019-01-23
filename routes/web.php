@@ -34,12 +34,12 @@ Route::get(
 //===========================================
 Route::get(
     'student/revision',
-    'AlumnoController@revision'
+    'StudentController@revision'
 )->name('student_revision');
 
 Route::post(
     'student/revision',
-    'AlumnoController@revisionPost'
+    'StudentController@revisionPost'
 )->name('student_revision_post');
 
 
