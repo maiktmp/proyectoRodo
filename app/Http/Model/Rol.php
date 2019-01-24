@@ -27,6 +27,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Rol extends Model
 {
+    const ESTUDIANTE = 1;
+    const ASESOR = 2;
+    const REVISOR = 3;
     protected $table = "rol";
     public $timestamps = false;
 }

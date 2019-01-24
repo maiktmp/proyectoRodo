@@ -18,11 +18,21 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Profesor'],
         ]);
         DB::table('status')->insert([
-            ['name' => 'Pendiente'],
+            ['name' => 'En revisión por el asesor'],
             ['name' => 'En revisión'],
             ['name' => 'Rechazado por el asesor'],
             ['name' => 'Rechazado por revisor'],
             ['name' => 'Aceptado'],
+        ]);
+        DB::table('state')->insert([
+            ['name' => 'Pendiente de aceptar por el asesor'],
+            ['name' => 'En revisión'],
+            ['name' => 'En correción por el alumno']
+        ]);
+        DB::table('rol')->insert([
+            ['name' => 'Alumno'],
+            ['name' => 'Asesor'],
+            ['name' => 'Profesor']
         ]);
 
         $faker = \Faker\Factory::create('es_MX');

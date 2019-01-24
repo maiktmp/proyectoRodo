@@ -9,13 +9,14 @@
 namespace App\Http\Model;
 
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * App\Http\Model\Process
  *
  * @property int $id
- * @property string $begin_date
+ * @property Carbon $begin_date
  * @property string $state_date
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -35,6 +36,7 @@ use Illuminate\Database\Eloquent\Model;
 class Process extends Model
 {
     protected $table = "process";
+    protected $dates = ['begin_date'];
 
     public function hasState()
     {

@@ -96,7 +96,6 @@ class CreateUsersTable extends Migration
 
         Schema::create('process_has_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->date('delivery_date');
             $table->timestamps();
             $table->unsignedInteger('fk_id_user');
             $table->unsignedInteger('fk_id_process');
@@ -117,11 +116,12 @@ class CreateUsersTable extends Migration
         Schema::create('document', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('no_document');
-            $table->string( 'url', 1000)->nullable();
+            $table->string('url', 1000)->nullable();
             $table->boolean('approved')->default(false);
+            $table->date('delivery_date')->nullable();
             $table->unsignedInteger('fk_id_status');
             $table->unsignedInteger('fk_id_user');
-
+            $table->timestamps();
             $table->foreign('fk_id_status')
                 ->references('id')
                 ->on('status');

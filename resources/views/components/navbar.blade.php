@@ -9,16 +9,24 @@
                 <div class="collapse navbar-collapse w-100" id="navbarNav">
                     {{--@if(Auth::guard('alumno')->check())--}}
                     <div class="row w-100">
-                        <div class="col-11">
-                            <h3 class="text-white text-left">@yield('navbarTitle')</h3>
+                        <div class="col-4 mt-1">
+                            <h5 class="text-white text-left">@yield('navbarTitle',"Bienvenido")</h5>
                         </div>
-                        <div class="col mt-2 text-right">
-                            <a href="{{route('logout')}}">
-                                <i class="fas fa-sign-out-alt font-size-1_5 text-white"></i>
-                            </a>
-                        </div>
+                        @if(Auth::check())
+                            <div class="col mt-1">
+                                <h5 class="text-white text-left">
+                                    {{Auth::user()->userType->name}}
+                                    :
+                                    {{Auth::user()->full_name}}
+                                </h5>
+                            </div>
+                            <div class="col-1 mt-2 text-right">
+                                <a href="{{route('logout')}}">
+                                    <i class="fas fa-sign-out-alt font-size-1_5 text-white"></i>
+                                </a>
+                            </div>
+                        @endif
                     </div>
-                    {{--@endif--}}
                 </div>
             </nav>
         </div>

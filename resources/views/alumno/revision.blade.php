@@ -24,11 +24,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col">
-                                <div class="alert alert-primary text-center" role="alert">
-                                    Alumno: {{$alumno->full_name}}
-                                </div>
-                            </div>
+
                         </div>
                         {!! Form::open([
                         'files'=>'true'

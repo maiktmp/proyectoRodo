@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $fk_id_user_type
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Http\Model\ProcessHasUser[] $processHasUsers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Http\Model\ProcessHasUser $processHasUsers
  * @property-read \App\Http\Model\UserType $userType
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User newQuery()
@@ -64,12 +64,13 @@ class User extends Authenticatable
 
     public function processHasUsers()
     {
-        return $this->hasMany(
+        return $this->hasOne(
             ProcessHasUser::class,
             'fk_id_user',
             'id'
         );
     }
+
     public function documents()
     {
         return $this->hasMany(
@@ -78,6 +79,7 @@ class User extends Authenticatable
             'id'
         );
     }
+
     public function getFullNameAttribute()
     {
         return $this->name . ' ' . $this->last_name;

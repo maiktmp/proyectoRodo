@@ -28,6 +28,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Status extends Model
 {
+    const PENDIENTE = 1;
+    const ACEPTADO_ASESOR = 2;
+    const RECHAZADO_ASESOR = 3;
+    const RECHAZADO_REVISOR = 4;
+    const ACEPTADO = 5;
     protected $table = "status";
     public $timestamps = false;
 }

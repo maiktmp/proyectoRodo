@@ -9,6 +9,7 @@
 namespace App\Http\Model;
 
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -32,11 +33,17 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Document whereNoDocument($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Document whereUrl($value)
  * @mixin \Eloquent
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Document whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Document whereUpdatedAt($value)
+ * @property string|null $delivery_date
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Document whereDeliveryDate($value)
  */
 class Document extends Model
 {
     protected $table = "document";
-    public $timestamps = false;
+    protected $dates = ['created_at'];
 
     public function processHasDocuments()
     {
@@ -49,7 +56,7 @@ class Document extends Model
 
     public function status()
     {
-        return $this->hasMany(
+        return $this->belongsTo(
             Status::class,
             'fk_id_status',
             'id'

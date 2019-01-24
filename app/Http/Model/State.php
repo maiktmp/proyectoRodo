@@ -27,6 +27,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class State extends Model
 {
+    const PENDIENTE = 1;
+    const EN_REVISION = 2;
+    const EN_CORRECCION = 3;
+
     protected $table = "state";
     public $timestamps = false;
 }

@@ -42,6 +42,10 @@ Route::post(
     'StudentController@revisionPost'
 )->name('student_revision_post');
 
+Route::view('student/process',
+    'generales.process_index')
+    ->name('process_student');
+
 
 //==========================================
 //               Admin

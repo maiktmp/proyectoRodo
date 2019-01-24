@@ -71,7 +71,10 @@ class LoginController extends Controller
         }
         $user = Auth::user();
         if ($user->userType->id === 2) {
-            return redirect()->route('student_revision');
+            if ($user->documents()->count() === 0) {
+                return redirect()->route('student_revision');
+            }
+            return redirect()->route('process_student');
         }
         return dd(Auth::user()->userType);
     }

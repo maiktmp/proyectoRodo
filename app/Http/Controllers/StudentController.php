@@ -10,7 +10,12 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Model\Document;
+use App\Http\Model\Process;
+use App\Http\Model\ProcessHasUser;
 use App\Http\Model\RevisionAlumno;
+use App\Http\Model\Rol;
+use App\Http\Model\State;
+use App\Http\Model\Status;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -48,7 +53,7 @@ class StudentController extends Controller
             $no_document = $alumno->documents()->count() > 0 ? $alumno->documents->count() : 1;
             $document->no_document = $no_document;
             $document->fk_id_user = $alumno->id;
-            $document->fk_id_status = 1;
+            $document->fk_id_status = Status::PENDIENTE;
             $transactionOk = $document->save();
             if ($transactionOk) {
                 $fileOk = $request->hasFile('url') &&
@@ -63,6 +68,28 @@ class StudentController extends Controller
                 $document->url = $docUrl;
                 $transactionOk = $transactionOk && $document->save();
             }
+            if ($transactionOk) {
+                $process = new Process();
+                $process->begin_date = Carbon::now();
+                $process->state_date = Carbon::now();
+                $transactionOk = $transactionOk && $process->save();
+                $process->hasState()->attach(State::PENDIENTE);
+                if ($transactionOk) {
+                    $processHasUser = new ProcessHasUser();
+                    $processHasUser->fk_id_user = $alumno->id;
+                    $processHasUser->fk_id_process = $process->id;
+                    $processHasUser->fk_id_rol = Rol::ESTUDIANTE;
+                    $transactionOk = $transactionOk && $processHasUser->save();
+                }
+                if ($transactionOk) {
+                    $processHasUser = new ProcessHasUser();
+                    $processHasUser->fk_id_user = $alumno->id;
+                    $processHasUser->fk_id_process = $process->id;
+                    $processHasUser->fk_id_rol = Rol::ESTUDIANTE;
+                    $transactionOk = $transactionOk && $processHasUser->save();
+                }
+            }
+
             if (!$transactionOk) {
                 $validator->getMessageBag()->add(
                     'general',
@@ -70,7 +97,7 @@ class StudentController extends Controller
                 );
                 return $this->returnCreateErrors($validator);
             }
-            return dd("ok");
+            return redirect()->route('process_student');
         } catch (\Exception $e) {
             $validator->getMessageBag()->add(
                 'general',
