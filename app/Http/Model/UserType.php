@@ -25,6 +25,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UserType extends Model
 {
+    const ADMIN = 1;
+    const ALUMNO = 2;
+    const PROFESOR = 3;
     protected $table = "user_type";
     public $timestamps = false;
 }

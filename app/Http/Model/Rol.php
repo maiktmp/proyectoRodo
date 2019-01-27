@@ -32,4 +32,9 @@ class Rol extends Model
     const REVISOR = 3;
     protected $table = "rol";
     public $timestamps = false;
+
+    public static function asMap()
+    {
+        return self::orderBy('id','DESC')->where('id', '<>', self::ESTUDIANTE)->pluck('name', 'id');
+    }
 }

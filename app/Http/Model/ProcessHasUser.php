@@ -40,6 +40,11 @@ use Illuminate\Database\Eloquent\Model;
 class ProcessHasUser extends Model
 {
     protected $table = "process_has_user";
+    protected $fillable = [
+        'delivery_date',
+        'fk_id_user',
+        'fk_id_rol',
+    ];
 
     public function user()
     {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Model\UserType;
 use Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -70,12 +71,16 @@ class LoginController extends Controller
                 ->withInput($request->all());
         }
         $user = Auth::user();
-        if ($user->userType->id === 2) {
+        if ($user->userType->id === UserType::ALUMNO) {
             if ($user->documents()->count() === 0) {
                 return redirect()->route('student_revision');
             }
             return redirect()->route('process_student');
         }
+        if ($user->userType->id === UserType::ADMIN) {
+            return redirect()->route('admin_index');
+        }
+
         return dd(Auth::user()->userType);
     }
 

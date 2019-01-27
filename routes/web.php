@@ -43,7 +43,7 @@ Route::post(
 )->name('student_revision_post');
 
 Route::view('student/process',
-    'generales.process_index')
+    'generales.documents_index')
     ->name('process_student');
 
 
@@ -53,29 +53,26 @@ Route::view('student/process',
 
 Route::get(
     'admin/main',
-    'AdminController@index'
+    'ProcessController@indexContents'
 )->name('admin_index');
 
 Route::get(
     'admin/process/{processId}/view',
-    'AdminController@getProcess'
+    'ProcessController@view'
 )->name('get_process');
 
 Route::get(
     'admin/process/{processId}/update',
-    'AdminController@updateProcess'
+    'ProcessController@updateProcess'
 )->name('update_process');
 
 Route::post(
     'admin/process/{processId}/update',
-    'AdminController@updateProcessPost'
+    'ProcessController@updateProcessPost'
 )->name('update_process_post');
 
 Route::get(
-    'teachers',
-    'AdminController@getTeachers'
-)->name('get_teachers');
-
-
-
+    'admin/process/teachers',
+    'ProcessController@getTeachers'
+)->name('update_teachers');
 

@@ -6,5 +6,8 @@
       integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
       crossorigin="anonymous"/>
 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+
 <link rel="stylesheet" type="text/css" href="{{ asset('commons/commons.css?v=1') }}"/>
 <link rel="stylesheet" type="text/css" href="{{ asset('css/general.css?v=1') }}"/>

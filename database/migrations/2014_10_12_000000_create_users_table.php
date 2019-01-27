@@ -38,6 +38,7 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->date('begin_date');
             $table->date('state_date');
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
 
@@ -97,6 +98,7 @@ class CreateUsersTable extends Migration
         Schema::create('process_has_user', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
+            $table->date('delivery_date')->nullable();
             $table->unsignedInteger('fk_id_user');
             $table->unsignedInteger('fk_id_process');
             $table->unsignedInteger('fk_id_rol');
@@ -118,7 +120,6 @@ class CreateUsersTable extends Migration
             $table->integer('no_document');
             $table->string('url', 1000)->nullable();
             $table->boolean('approved')->default(false);
-            $table->date('delivery_date')->nullable();
             $table->unsignedInteger('fk_id_status');
             $table->unsignedInteger('fk_id_user');
             $table->timestamps();

@@ -84,4 +84,14 @@ class User extends Authenticatable
     {
         return $this->name . ' ' . $this->last_name;
     }
+
+    public static function isAdmin()
+    {
+        return \Auth::user()->fk_id_user_type === UserType::ADMIN;
+    }
+
+    public static function usersTeachers()
+    {
+        return User::whereFkIdUserType(UserType::PROFESOR)->get();
+    }
 }
