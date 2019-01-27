@@ -2,10 +2,18 @@
     $user=Auth::user();
 
     $process=$process??$user->processHasUsers->process;
-    $adviser=$user->processHasUsers()->whereFkIdRol(\App\Http\Model\Rol::ASESOR)->first();
-    $reviewers=$user->processHasUsers()->whereFkIdRol(\App\Http\Model\Rol::REVISOR)->get();
+    $adviser=$process->hasUser()->whereFkIdRol(\App\Http\Model\Rol::ASESOR)->first();
+    $reviewers=$process->hasUser()->whereFkIdRol(\App\Http\Model\Rol::REVISOR)->get();
 /* @var $reviwer \App\Http\Model\ProcessHasUser*/
 @endphp
+
+@if(\App\Http\Model\User::isAdmin())
+@section('backButton')
+    <a href="{{route('admin_index')}}">
+        <i class="fas fa-angle-left text-white" style="font-size: 1.5em"></i>
+    </a>
+@endsection
+@endif
 
 @extends('template.main')
 @section('navbarTitle', 'Procesos')
@@ -23,14 +31,16 @@
                             <div class="col-11 text-center">
                                 Detalles del proceso
                             </div>
-                            <div class="col">
-                                <a data-toggle="tooltip"
-                                   data-placement="top"
-                                   title="Administrar docentes"
-                                   href="{{route('update_process',['processId'=>$process->id])}}">
-                                    <i class="fas fa-users-cog" style="font-size: 1.5em"></i>
-                                </a>
-                            </div>
+                            @if(\App\Http\Model\User::isAdmin())
+                                <div class="col">
+                                    <a data-toggle="tooltip"
+                                       data-placement="top"
+                                       title="Administrar docentes"
+                                       href="{{route('update_process',['processId'=>$process->id])}}">
+                                        <i class="fas fa-users-cog" style="font-size: 1.5em"></i>
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="card-body">
@@ -48,11 +58,11 @@
                             <li>
                                 @if($reviewers->count()>0)
                                     <dt><b>Revisores:</b></dt>
-                                    <dl>
+                                    <ul>
                                         @foreach($reviewers as $reviwer)
-                                            <dd>*{{$reviwer->user->full_name}}</dd>
+                                            <li>{{$reviwer->user->full_name}}</li>
                                         @endforeach
-                                    </dl>
+                                    </ul>
                                 @else
                                     <b>Revisores:</b> Sin Asignar
                                 @endif
@@ -82,7 +92,14 @@
                             <th scope="col">{{$loop->iteration}}</th>
                             <td>{{$document->status->name}}</td>
                             <td>{{\App\Services\DateFormatterService::fullDatetime($document->created_at)}}</td>
-                            <td>{{\App\Services\DateFormatterService::fullDatetime($document->delivery_date)}}</td>
+                            <td>
+                                <ul>
+                                    @foreach($reviewers as $reviwer)
+                                        <li>{{$reviwer->user->full_name}}
+                                            : {{\App\Services\DateFormatterService::fullDate($reviwer->delivery_date)}}</li>
+                                    @endforeach
+                                </ul>
+                            </td>
                         </tr>
                     @empty
                     @endforelse

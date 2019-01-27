@@ -72,6 +72,12 @@ Route::post(
 )->name('update_process_post');
 
 Route::get(
+    'admin/process/{processHasUserId}/update_status/{state}',
+    'ProcessController@changeStatus'
+)->name('update_process_changeStatus');
+
+
+Route::get(
     'admin/process/teachers',
     'ProcessController@getTeachers'
 )->name('update_teachers');

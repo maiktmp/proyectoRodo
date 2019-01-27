@@ -61,12 +61,44 @@ class ProcessController extends Controller
             ]
         );
         $validator->validate();
+        $validator = Validator::make([], []);
+        $processHasUserId = $request->input('update-row', null);
         $process = Process::find($processId);
-        $processHasUser = new ProcessHasUser();
+
+        $processHasUser = $process->hasUser()->whereFkIdUser($request->input('fk_id_user'))->first();
+
+        if ($processHasUser != null && $processHasUserId === null) {
+            $validator->getMessageBag()->add('general',
+                "Actualmente el docente "
+                . $processHasUser->user->fullname
+                . "ya se encuentra asignado a este proceso como "
+                . $processHasUser->rol->name
+            );
+            return back()->withInput()->withErrors($validator);
+        }
+        if ($processHasUserId !== null) {
+            $processHasUser = ProcessHasUser::find($processHasUserId);
+        } else {
+            $processHasUser = new ProcessHasUser();
+        }
         $processHasUser->fill($request->all());
+        if ($processHasUser->fk_id_rol == Rol::ASESOR) {
+            $processHasUser->delivery_date = null;
+        }
         $processHasUser->fk_id_process = $process->id;
         if ($processHasUser->save()) {
             return back();
+        } else {
+            return error;
+        }
+    }
+
+    public function changeStatus($processHasUserId, $state)
+    {
+        $processHaUser = ProcessHasUser::find($processHasUserId);
+        $processHaUser->active = $state === "1" ? true : false;
+        if ($processHaUser->save()) {
+            return redirect()->route('update_process', ['processId' => $processHaUser->process->id]);
         } else {
             return error;
         }

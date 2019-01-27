@@ -10,7 +10,15 @@
                     {{--@if(Auth::guard('alumno')->check())--}}
                     <div class="row w-100">
                         <div class="col-4 mt-1">
-                            <h5 class="text-white text-left">@yield('navbarTitle',"Bienvenido")</h5>
+                            <div class="row">
+                                <div class="col-1">
+                                    @yield('backButton')
+                                </div>
+                                <div class="col">
+                                    <h5 class="text-white text-left">@yield('navbarTitle',"Bienvenido")</h5>
+                                </div>
+                            </div>
+
                         </div>
                         @if(Auth::check())
                             <div class="col mt-1">

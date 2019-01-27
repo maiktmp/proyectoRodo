@@ -5,6 +5,11 @@
 @extends('template.main')
 @section('navbarTitle', 'Editar Proceso')
 @section('title', 'Configuración de procesos')
+@section('backButton')
+    <a href="{{route('get_process',['processId'=>$process->id])}}">
+        <i class="fas fa-angle-left text-white" style="font-size: 1.5em"></i>
+    </a>
+@endsection
 @push('scripts')
     <script src="{{ asset('commons/lib/jquery.autocomplete.min.js') }}"></script>
     <script type="text/javascript" charset="utf8" src="{{asset('js/process.js')}}"></script>
@@ -12,6 +17,15 @@
 @section('content')
     <div class="container">
         <input id="inp-users" type="hidden" value="{{route('update_teachers')}}">
+        @if($errors->has('general'))
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-danger" role="alert">
+                        {{$errors->first('general')}}
+                    </div>
+                </div>
+            </div>
+        @endif
         <div class="row my-2">
             <div class="col-12">
                 <div class="card">
@@ -28,6 +42,7 @@
                                 'value'=> old('fk_id_user_autocomplete')
                             ])
                                 <input id="fk_id_user" type="hidden" name="fk_id_user" value="{{old('fk_id_user')}}">
+                                <input id="update-row" type="hidden" name="update-row" value="{{old('update-row')}}">
                             </div>
                             <div class="col-3">
                                 @include('components.form.select_group', [
@@ -95,6 +110,8 @@
                                              ->get() as $processHasUser)
                                         <tr id="tr-process-user-{{$processHasUser->id}}">
                                             <td id="td-process-user-{{$processHasUser->id}}" hidden>
+                                                <input id="inp-value-id-process" type="hidden"
+                                                       value="{{$processHasUser->id}}">
                                                 <input id="inp-value-id" type="hidden"
                                                        value="{{$processHasUser->user->id}}">
                                                 <input id="inp-value-name" type="hidden"
@@ -111,10 +128,18 @@
                                                 {{$processHasUser->rol->name}}
                                             </td>
                                             <td>
-                                                {{$processHasUser->delivery_date??"No aplica"}}
+                                                {{\App\Services\DateFormatterService::fullDate($processHasUser->delivery_date)}}
                                             </td>
                                             <td>
-                                                <i class="fas fa-toggle-on"></i>
+
+                                                <a href="{{route('update_process_changeStatus',
+                                                [
+                                                'processHasUserId'=>$processHasUser->id,
+                                                'state'=>$processHasUser->active?0:1
+                                                ])}}">
+                                                    <i class="fas {{$processHasUser->active?'fa-toggle-on':'fa-toggle-off'}}"
+                                                       style="font-size: 1.5em"></i>
+                                                </a>
                                                 &nbsp;
                                                 &nbsp;
                                                 &nbsp;
@@ -124,7 +149,8 @@
                                                         class="fas fa-user-edit cursor-pointer text-primary btn-edit-process-user"
                                                         data-toggle="tooltip"
                                                         data-placement="top"
-                                                        title="Actualizar"></i>
+                                                        title="Actualizar"
+                                                        style="font-size: 1.5em"></i>
                                             </td>
                                         </tr>
                                     @empty

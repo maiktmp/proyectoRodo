@@ -42,6 +42,7 @@ class DateFormatterService
             $fDate,
             0,
             strrpos($fDate, ','));
+
         return $fDate;
     }
 

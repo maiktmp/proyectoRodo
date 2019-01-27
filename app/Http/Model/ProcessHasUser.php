@@ -45,6 +45,9 @@ class ProcessHasUser extends Model
         'fk_id_user',
         'fk_id_rol',
     ];
+    protected $dates = [
+        'delivery_date'
+    ];
 
     public function user()
     {

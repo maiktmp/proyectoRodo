@@ -98,6 +98,7 @@ class CreateUsersTable extends Migration
         Schema::create('process_has_user', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
+            $table->boolean('active')->default(true);
             $table->date('delivery_date')->nullable();
             $table->unsignedInteger('fk_id_user');
             $table->unsignedInteger('fk_id_process');
