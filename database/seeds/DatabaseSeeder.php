@@ -17,6 +17,10 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Alumno'],
             ['name' => 'Profesor'],
         ]);
+        DB::table('position')->insert([
+            ['name' => 'Aceptado'],
+            ['name' => 'Rechazado']
+        ]);
         DB::table('status')->insert([
             ['name' => 'En revisión por el asesor'],
             ['name' => 'En revisión'],
@@ -25,9 +29,12 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Aceptado'],
         ]);
         DB::table('state')->insert([
+            ['name' => 'Pendiente de asignación'],
             ['name' => 'Pendiente de aceptar por el asesor'],
             ['name' => 'En revisión'],
-            ['name' => 'En correción por el alumno']
+            ['name' => 'En correción por el alumno'],
+            ['name' => 'Concluido'],
+            ['name' => 'Retrasado']
         ]);
         DB::table('rol')->insert([
             ['name' => 'Alumno'],

@@ -27,6 +27,14 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Position extends Model
 {
+    const ACEPTADO = 1;
+    const RECHAZADO = 2;
     protected $table = "position";
     public $timestamps = false;
+
+    public static function asMap()
+    {
+        return self::pluck('name', 'id');
+    }
+
 }

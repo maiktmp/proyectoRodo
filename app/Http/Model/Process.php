@@ -9,6 +9,7 @@
 namespace App\Http\Model;
 
 
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,6 +33,11 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Process whereStateDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Process whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $active
+ * @property int $fk_id_state
+ * @property-read \App\Http\Model\State $state
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Process whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Process whereFkIdState($value)
  */
 class Process extends Model
 {
@@ -65,6 +71,85 @@ class Process extends Model
             'fk_id_process',
             'id'
         );
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(
+            State::class,
+            'fk_id_state',
+            'id'
+        );
+    }
+
+    public static function firstFilter()
+    {
+        return Process::whereFkIdState(State::PENDIENTE)->get();
+    }
+
+    public static function secondFilter()
+    {
+        return Process::whereFkIdState(State::PENDIENTE_ASESOR)->get();
+    }
+
+    public static function thirdFilter()
+    {
+        return Process::whereFkIdState(State::EN_REVISION)->get();
+    }
+
+    public static function fourthFilter()
+    {
+        return Process::whereFkIdState(State::EN_CORRECCION)->get();
+    }
+
+    public static function fifthFilter()
+    {
+        return Process::whereFkIdState(State::RETRASADO)->get();
+    }
+
+    public static function sixtFilter()
+    {
+        return Process::whereFkIdState(State::CONCLUIDO)->get();
+    }
+
+    public static function reviewerNotView()
+    {
+        return Process::whereHas('hasUser', function ($q) {
+            $q->where('fk_id_user', Auth::user()->id)
+                ->where('fk_id_rol', Rol::REVISOR);
+        })->where('fk_id_state', State::EN_REVISION)->get();
+    }
+
+    public static function reviewerAccept()
+    {
+        return Process::whereHas('hasUser', function ($q) {
+            $q->where('fk_id_user', Auth::user()->id)
+                ->where('fk_id_rol', Rol::REVISOR);
+        })->where('fk_id_state', State::EN_CORRECCION)->get();
+    }
+
+    public static function teacherProcessComplete()
+    {
+        return Process::whereHas('hasUser', function ($q) {
+            $q->where('fk_id_user', Auth::user()->id);
+        })->where('fk_id_state', State::CONCLUIDO)->get();
+    }
+
+
+    public static function adviserNotView()
+    {
+        return Process::whereHas('hasUser', function ($q) {
+            $q->where('fk_id_user', Auth::user()->id)
+                ->where('fk_id_rol', Rol::ASESOR);
+        })->where('fk_id_state', State::PENDIENTE_ASESOR)->get();
+    }
+
+    public static function adviserAccept()
+    {
+        return Process::whereHas('hasUser', function ($q) {
+            $q->where('fk_id_user', Auth::user()->id)
+                ->where('fk_id_rol', Rol::ASESOR);
+        })->where('fk_id_state', State::EN_REVISION)->get();
     }
 
 }

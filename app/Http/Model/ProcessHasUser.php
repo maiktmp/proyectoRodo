@@ -36,6 +36,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\ProcessHasUser whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\ProcessHasUser whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $active
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\ProcessHasUser whereActive($value)
  */
 class ProcessHasUser extends Model
 {

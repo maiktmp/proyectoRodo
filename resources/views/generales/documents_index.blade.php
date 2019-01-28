@@ -1,6 +1,5 @@
 @php
     $user=Auth::user();
-
     $process=$process??$user->processHasUsers->process;
     $adviser=$process->hasUser()->whereFkIdRol(\App\Http\Model\Rol::ASESOR)->first();
     $reviewers=$process->hasUser()->whereFkIdRol(\App\Http\Model\Rol::REVISOR)->get();
@@ -15,6 +14,14 @@
 @endsection
 @endif
 
+@if(\App\Http\Model\User::isTeacher())
+@section('backButton')
+    <a href="{{route('teachers_index')}}">
+        <i class="fas fa-angle-left text-white" style="font-size: 1.5em"></i>
+    </a>
+@endsection
+@endif
+
 @extends('template.main')
 @section('navbarTitle', 'Procesos')
 @section('title', 'Procesos activos')
@@ -23,6 +30,7 @@
 @endpush
 @section('content')
     <div class="container">
+
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -50,7 +58,7 @@
                                     Inicio:</b> {{\App\Services\DateFormatterService::fullDate($process->begin_date)}}
                             </li>
                             <li>
-                                <b>Estatus:</b> {{$process->hasState()->latest()->first()->name}}
+                                <b>Estatus:</b> {{$process->state->name}}
                             </li>
                             <li>
                                 <b>Asesor:</b> {{$adviser===null?'Sin Asignar':$adviser->user->full_name}}
@@ -88,7 +96,8 @@
                             ->first()
                             ->user
                             ->documents as $document)
-                        <tr>
+                        <tr class="clickable-row cursor-pointer"
+                            data-href='{{route('student_document',['documentId'=>$document->id])}}'>
                             <th scope="col">{{$loop->iteration}}</th>
                             <td>{{$document->status->name}}</td>
                             <td>{{\App\Services\DateFormatterService::fullDatetime($document->created_at)}}</td>

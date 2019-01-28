@@ -36,6 +36,8 @@ use PhpParser\Comment\Doc;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\ProcessHasDocument whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\ProcessHasDocument whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $document_url
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\ProcessHasDocument whereDocumentUrl($value)
  */
 class ProcessHasDocument extends Model
 {

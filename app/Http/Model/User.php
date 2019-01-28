@@ -8,6 +8,7 @@
 
 namespace App\Http\Model;
 
+use Auth;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 
@@ -90,8 +91,35 @@ class User extends Authenticatable
         return \Auth::user()->fk_id_user_type === UserType::ADMIN;
     }
 
+    public static function isTeacher()
+    {
+        return \Auth::user()->fk_id_user_type === UserType::PROFESOR;
+    }
+
     public static function usersTeachers()
     {
         return User::whereFkIdUserType(UserType::PROFESOR)->get();
     }
+
+    public static function userReviewerProcess($processId)
+    {
+        $process = Process::whereId($processId)
+            ->whereHas('hasUser', function ($q) {
+                $q->where('fk_id_user', Auth::user()->id)
+                    ->where('fk_id_rol', Rol::REVISOR);
+            })->first();
+        return $process !== null;
+    }
+
+    public static function userAdviserProcess($processId)
+    {
+        $process = Process::whereId($processId)
+            ->whereHas('hasUser', function ($q) {
+                $q->where('fk_id_user', Auth::user()->id)
+                    ->where('fk_id_rol', Rol::ASESOR);
+            })->first();
+        return $process !== null;
+    }
+
+
 }

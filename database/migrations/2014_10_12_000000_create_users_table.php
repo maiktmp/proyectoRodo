@@ -33,6 +33,10 @@ class CreateUsersTable extends Migration
                 ->references('id')
                 ->on('user_type');
         });
+        Schema::create('state', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+        });
 
         Schema::create('process', function (Blueprint $table) {
             $table->increments('id');
@@ -40,6 +44,11 @@ class CreateUsersTable extends Migration
             $table->date('state_date');
             $table->boolean('active')->default(true);
             $table->timestamps();
+
+            $table->unsignedInteger('fk_id_state');
+            $table->foreign('fk_id_state')
+                ->references('id')
+                ->on('state');
         });
 
         Schema::create('rol', function (Blueprint $table) {
@@ -47,10 +56,6 @@ class CreateUsersTable extends Migration
             $table->string('name');
         });
 
-        Schema::create('state', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-        });
 
         Schema::create('action', function (Blueprint $table) {
             $table->increments('id');
@@ -119,6 +124,7 @@ class CreateUsersTable extends Migration
         Schema::create('document', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('no_document');
+            $table->string('comments', 1000)->nullable();
             $table->string('url', 1000)->nullable();
             $table->boolean('approved')->default(false);
             $table->unsignedInteger('fk_id_status');
@@ -134,7 +140,8 @@ class CreateUsersTable extends Migration
 
         Schema::create('process_has_document', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('comments', 1000);
+            $table->string('comments', 1000)->nullable();
+            $table->string('document_url', 1000)->nullable();
             $table->timestamps();
             $table->unsignedInteger('fk_id_document');
             $table->unsignedInteger('fk_id_position');
@@ -168,9 +175,9 @@ class CreateUsersTable extends Migration
         Schema::dropIfExists('status');
         Schema::dropIfExists('position');
         Schema::dropIfExists('action');
-        Schema::dropIfExists('state');
         Schema::dropIfExists('rol');
         Schema::dropIfExists('process');
+        Schema::dropIfExists('state');
         Schema::dropIfExists('user');
         Schema::dropIfExists('user_type');
     }

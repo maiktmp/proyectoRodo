@@ -81,6 +81,10 @@ class LoginController extends Controller
             return redirect()->route('admin_index');
         }
 
+        if ($user->userType->id === UserType::PROFESOR) {
+            return redirect()->route('teachers_index');
+        }
+
         return dd(Auth::user()->userType);
     }
 

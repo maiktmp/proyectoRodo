@@ -28,8 +28,11 @@ use Illuminate\Database\Eloquent\Model;
 class State extends Model
 {
     const PENDIENTE = 1;
-    const EN_REVISION = 2;
-    const EN_CORRECCION = 3;
+    const PENDIENTE_ASESOR = 2;
+    const EN_REVISION = 3;
+    const EN_CORRECCION = 4;
+    const CONCLUIDO = 5;
+    const RETRASADO = 6;
 
     protected $table = "state";
     public $timestamps = false;

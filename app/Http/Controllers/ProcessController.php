@@ -12,6 +12,7 @@ namespace App\Http\Controllers;
 use App\Http\Model\Process;
 use App\Http\Model\ProcessHasUser;
 use App\Http\Model\Rol;
+use App\Http\Model\State;
 use App\Http\Model\User;
 use Illuminate\Http\Request;
 use Validator;
@@ -80,6 +81,9 @@ class ProcessController extends Controller
             $processHasUser = ProcessHasUser::find($processHasUserId);
         } else {
             $processHasUser = new ProcessHasUser();
+            $process->hasState()->attach(State::PENDIENTE_ASESOR);
+            $process->fk_id_state = State::PENDIENTE_ASESOR;
+            $process->save();
         }
         $processHasUser->fill($request->all());
         if ($processHasUser->fk_id_rol == Rol::ASESOR) {

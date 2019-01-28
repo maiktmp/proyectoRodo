@@ -46,6 +46,14 @@ Route::view('student/process',
     'generales.documents_index')
     ->name('process_student');
 
+Route::get('student/document/{documentId}',
+    'StudentController@viewDocument')
+    ->name('student_document');
+
+Route::post('student/document/{documentId}',
+    'StudentController@viewDocumentPost')
+    ->name('student_document_post');
+
 
 //==========================================
 //               Admin
@@ -82,3 +90,12 @@ Route::get(
     'ProcessController@getTeachers'
 )->name('update_teachers');
 
+
+//==========================================
+//               Admin
+//===========================================
+
+Route::view(
+    'teacher/main',
+    'generales.process_teachers_index')
+    ->name('teachers_index');
