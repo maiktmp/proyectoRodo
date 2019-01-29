@@ -11,7 +11,7 @@
             <div class="col-8 offset-2">
                 <div class="card my-3">
                     <div class="card-header text-center bg-primary">
-                        <h3 class="text-white">Revisión {{isset($document)?:'1'}}</h3>
+                        <h3 class="text-white">Revisión {{Auth::user()->documents()->count()+1}}</h3>
                     </div>
                     <div class="row">
                         @if ($errors->has('general'))

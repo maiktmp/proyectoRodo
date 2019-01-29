@@ -75,20 +75,22 @@ class StudentController extends Controller
                 $transactionOk = $transactionOk && $document->save();
             }
             if ($transactionOk) {
-                $process = new Process();
-                $process->begin_date = Carbon::now();
+                $created = false;
+                if ($alumno->processHasUsers->count() > 0) {
+                    $process = Process::whereHas('hasUser', function ($q) use ($alumno) {
+                        $q->where('fk_id_user', $alumno->id);
+                    })->first();
+                    $process->fk_id_state = State::PENDIENTE_ASESOR;
+                    $created = true;
+                } else {
+                    $process = new Process();
+                    $process->begin_date = Carbon::now();
+                    $process->fk_id_state = State::PENDIENTE;
+                }
                 $process->state_date = Carbon::now();
-                $process->fk_id_state = State::PENDIENTE;
                 $transactionOk = $transactionOk && $process->save();
                 $process->hasState()->attach(State::PENDIENTE);
-                if ($transactionOk) {
-                    $processHasUser = new ProcessHasUser();
-                    $processHasUser->fk_id_user = $alumno->id;
-                    $processHasUser->fk_id_process = $process->id;
-                    $processHasUser->fk_id_rol = Rol::ESTUDIANTE;
-                    $transactionOk = $transactionOk && $processHasUser->save();
-                }
-                if ($transactionOk) {
+                if ($transactionOk && !$created) {
                     $processHasUser = new ProcessHasUser();
                     $processHasUser->fk_id_user = $alumno->id;
                     $processHasUser->fk_id_process = $process->id;

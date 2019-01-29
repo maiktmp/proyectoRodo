@@ -92,7 +92,7 @@
                 @if(\App\Http\Model\ProcessHasDocument::
                 whereHas('processHasUser',function ($q) use ($document){$q->where('fk_id_user',Auth::user()->id);})
                 ->where('fk_id_document',$document->id)
-                ->first() ===null)
+                ->first() ===null  && \App\Http\Model\ProcessHasUser::whereFkIdUser(Auth::user()->id)->first()->active===1)
                     <div class="col-8 offset-2 my-2">
                         <div class="card">
                             <div class="card-body">

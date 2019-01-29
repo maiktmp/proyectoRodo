@@ -91,6 +91,11 @@ class User extends Authenticatable
         return \Auth::user()->fk_id_user_type === UserType::ADMIN;
     }
 
+    public static function isStudent()
+    {
+        return \Auth::user()->fk_id_user_type === UserType::ALUMNO;
+    }
+
     public static function isTeacher()
     {
         return \Auth::user()->fk_id_user_type === UserType::PROFESOR;

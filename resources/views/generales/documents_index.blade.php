@@ -48,6 +48,13 @@
                                         <i class="fas fa-users-cog" style="font-size: 1.5em"></i>
                                     </a>
                                 </div>
+                            @elseif(\App\Http\Model\User::isStudent() && $process->state->id === \App\Http\Model\State::EN_CORRECCION )
+                                    <a data-toggle="tooltip"
+                                       data-placement="top"
+                                       title="Subir una nueva versión"
+                                       href="{{route('student_revision')}}">
+                                        <i class="far fa-plus-square fa-2x" style="font-size: 1.5em"></i>
+                                    </a>
                             @endif
                         </div>
                     </div>
@@ -79,6 +86,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-12 mt-2">
                 <table id="table" class="table table-hover">
                     <thead>
