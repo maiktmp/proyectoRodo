@@ -66,7 +66,7 @@ class LoginController extends Controller
         ];
 
         if (!Auth::attempt($loginParams, $remember)) {
-            redirect()->route('login')
+            return redirect()->route('login')
                 ->withErrors((['username' => 'Usuario o contraseña incorrectos.']))
                 ->withInput($request->all());
         }

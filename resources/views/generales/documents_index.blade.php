@@ -1,8 +1,10 @@
 @php
     $user=Auth::user();
+
     $process=$process??$user->processHasUsers->process;
     $adviser=$process->hasUser()->whereFkIdRol(\App\Http\Model\Rol::ASESOR)->first();
     $reviewers=$process->hasUser()->whereFkIdRol(\App\Http\Model\Rol::REVISOR)->get();
+
 /* @var $reviwer \App\Http\Model\ProcessHasUser*/
 @endphp
 
@@ -30,7 +32,6 @@
 @endpush
 @section('content')
     <div class="container">
-
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -49,12 +50,12 @@
                                     </a>
                                 </div>
                             @elseif(\App\Http\Model\User::isStudent() && $process->state->id === \App\Http\Model\State::EN_CORRECCION )
-                                    <a data-toggle="tooltip"
-                                       data-placement="top"
-                                       title="Subir una nueva versión"
-                                       href="{{route('student_revision')}}">
-                                        <i class="far fa-plus-square fa-2x" style="font-size: 1.5em"></i>
-                                    </a>
+                                <a data-toggle="tooltip"
+                                   data-placement="top"
+                                   title="Subir una nueva versión"
+                                   href="{{route('student_revision')}}">
+                                    <i class="far fa-plus-square fa-2x" style="font-size: 1.5em"></i>
+                                </a>
                             @endif
                         </div>
                     </div>

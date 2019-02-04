@@ -35,6 +35,25 @@ class Rol extends Model
 
     public static function asMap()
     {
-        return self::orderBy('id','DESC')->where('id', '<>', self::ESTUDIANTE)->pluck('name', 'id');
+        return self::orderBy('id', 'DESC')->where('id', '<>', self::ESTUDIANTE)->pluck('name', 'id');
+    }
+
+    public static function asMapInProcess($processId, $userId)
+    {
+        return self::whereHas('process', function ($q) use ($userId, $processId) {
+            $q->where('fk_id_user', $userId)
+                ->where('fk_id_process', $processId);
+        })
+            ->get()
+            ->pluck('name', 'id');
+    }
+
+    public function process()
+    {
+        return $this->hasMany(
+            ProcessHasUser::class,
+            'fk_id_rol',
+            'id'
+        );
     }
 }

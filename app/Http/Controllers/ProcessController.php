@@ -46,12 +46,29 @@ class ProcessController extends Controller
         $rules = [
             'fk_id_user' => 'required',
         ];
-        if ($request->input('fk_id_rol') * 1 === Rol::REVISOR) {
-            $rules['delivery_date'] = 'required|date|after:now';
+        $processHasUser = ProcessHasUser::whereFkIdUser($request
+            ->input('fk_id_user'))
+            ->whereFkIdRol(Rol::REVISOR)
+            ->first();
 
-        } else {
-            $rules['delivery_date'] = 'nullable|date|after:now';
+        if ($processHasUser !== null) {
+            if ($processHasUser->delivery_date !== null) {
+                if ($request->input('fk_id_rol') * 1 === Rol::REVISOR) {
+                    $rules['delivery_date'] = 'required|date|after:now';
+                }
+            } else {
+                $process = Process::find($processId);
+                if ($process->state !== State::EN_REVISION) {
+                    $validator = Validator::make([], []);
+                    $validator->getMessageBag()->add('general', "No se puede asignar la fecha hasta que el asesor acepte el documento");
+                    return back()
+                        ->withInput()
+                        ->withErrors($validator);
+                }
+                $rules['delivery_date'] = 'nullable|date|after:now';
+            }
         }
+
         $validator = Validator::make(
             $request->all(),
             $rules,
@@ -66,17 +83,6 @@ class ProcessController extends Controller
         $processHasUserId = $request->input('update-row', null);
         $process = Process::find($processId);
 
-        $processHasUser = $process->hasUser()->whereFkIdUser($request->input('fk_id_user'))->first();
-
-        if ($processHasUser != null && $processHasUserId === null) {
-            $validator->getMessageBag()->add('general',
-                "Actualmente el docente "
-                . $processHasUser->user->fullname
-                . "ya se encuentra asignado a este proceso como "
-                . $processHasUser->rol->name
-            );
-            return back()->withInput()->withErrors($validator);
-        }
         if ($processHasUserId !== null) {
             $processHasUser = ProcessHasUser::find($processHasUserId);
         } else {

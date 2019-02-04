@@ -11,8 +11,6 @@
                 <div class="card my-3">
                     <div class="card-header text-center bg-primary">
                         <h4 class="text-white">Inicio de sesión</h4>
-                        @hello(‘Jesse’)
-
                     </div>
                     <div class="card-body">
                         {!! Form::open([

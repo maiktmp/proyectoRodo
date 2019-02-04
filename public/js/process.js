@@ -1,8 +1,8 @@
 var teachers = [];
 var trUpdated = 0;
-if ($('#select_rol').val() * 1 === 2) {
-    $("#deliveryDate").attr('disabled', true);
-}
+
+$("#deliveryDate").attr('disabled', true);
+
 $(document).ready(function () {
     if ($("#update-row").val() !== "") {
         setTimeout(function () {
@@ -37,7 +37,6 @@ $(document).ready(function () {
         if (trUpdated !== 0) {
             $("#tr-process-user-" + trUpdated).attr('hidden', false);
         }
-
         var id;
         if (btnId === 0) {
             id = $(btn).attr('data-process-id') * 1;
@@ -58,12 +57,12 @@ $(document).ready(function () {
             $("#fk_id_user").val(id);
             $("#inp-autocomplete").val(name);
             $("#select_rol").val(rol);
-            if (rol === 2) {
-                $("#deliveryDate").attr('disabled', true);
-            } else {
-                $("#deliveryDate").attr('disabled', false);
-            }
             $("#deliveryDate").val(delivery_date);
+        }
+        if (rol === 2) {
+            $("#deliveryDate").attr('disabled', true);
+        } else {
+            $("#deliveryDate").attr('disabled', false);
         }
         $("#inp-autocomplete").prop('readonly', true);
         $("#update-row").val(idProcess);
@@ -80,11 +79,11 @@ $(document).ready(function () {
         $("#inp-autocomplete").prop('readonly', false);
         $("#inp-autocomplete").val("");
         $("#deliveryDate").val("");
+        $("#deliveryDate").attr('disabled', true);
 
         $("#update-row").val("");
-        $("#btn-dynamic").addEventListener('fa-plus-circle ').removeClass('fa-check-square');
+        $("#btn-dynamic").addClass('fa-plus-circle ').removeClass('fa-check-square');
         $("#btn-dynamic-cancel").attr('hidden', true);
-
     });
 
 });

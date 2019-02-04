@@ -67,16 +67,16 @@ class StudentController extends Controller
             if ($fileOk) {
                 $docUrl = $this->storeDocx(
                     $request->file('url'),
-                    $alumno->id,
-                    $no_document,
-                    $alumno->full_name
+                    Auth::user()->id,
+                    $document->no_document,
+                    Auth::user()->full_name
                 );
                 $document->url = $docUrl;
                 $transactionOk = $transactionOk && $document->save();
             }
             if ($transactionOk) {
                 $created = false;
-                if ($alumno->processHasUsers->count() > 0) {
+                if ($alumno->processHasUsers()->count() > 0) {
                     $process = Process::whereHas('hasUser', function ($q) use ($alumno) {
                         $q->where('fk_id_user', $alumno->id);
                     })->first();
@@ -155,7 +155,9 @@ class StudentController extends Controller
         $fileOk = false;
         $docUrl = null;
         $document = Document::find($documentId);
-        $processHasUser = ProcessHasUser::whereFkIdUser(Auth::user()->id)->first();
+        $processHasUser = ProcessHasUser::whereFkIdUser(Auth::user()->id)
+            ->where('fk_id_rol', $request->input('fk_id_rol'))
+            ->first();
         if (request('doc_url') !== null) {
             $fileOk = $request->hasFile('doc_url') &&
                 $request->file('doc_url')->isValid();
@@ -192,7 +194,7 @@ class StudentController extends Controller
                     }
                 }
                 $processHasUsers = ProcessHasUser::where('fk_id_rol', Rol::REVISOR)->get();
-                $processHasUser->each(function ($processHasUser) use ($date) {
+                $processHasUsers->each(function ($processHasUser) use ($date) {
                     $processHasUser->delivery_date = $date;
                     $processHasUser->save();
                 });

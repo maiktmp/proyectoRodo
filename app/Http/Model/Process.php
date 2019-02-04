@@ -149,7 +149,15 @@ class Process extends Model
         return Process::whereHas('hasUser', function ($q) {
             $q->where('fk_id_user', Auth::user()->id)
                 ->where('fk_id_rol', Rol::ASESOR);
-        })->where('fk_id_state', State::EN_REVISION)->get();
+        })->whereIn('fk_id_state', [State::EN_REVISION, State::EN_CORRECCION])->get();
     }
 
+    public function revised($userId, $processId)
+    {
+        ProcessHasUser::whereFkIdUser($userId)
+            ->where('fk_id_process', $processId)
+            ->whereHas('revision.', function ($q) {
+                $q->where('id',Status::Recha);
+            });
+    }
 }

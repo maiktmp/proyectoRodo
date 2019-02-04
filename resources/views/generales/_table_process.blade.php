@@ -19,7 +19,7 @@
                         <th scope="col">{{
                                 $processIter->hasUser()->whereFkIdRol(\App\Http\Model\Rol::ESTUDIANTE)->first()->user->full_name
                                 }}</th>
-                        <th scope="col">{{$processIter->hasState()->latest()->first()->name}}</th>
+                        <th scope="col">{{$processIter->state->name}}</th>
                         <th scope="col">
                             <ul>
                                 @forelse( $processIter->hasUser()->whereFkIdRol(\App\Http\Model\Rol::ASESOR)->get() as $reviwer)

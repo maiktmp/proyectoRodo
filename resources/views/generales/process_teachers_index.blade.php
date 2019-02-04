@@ -27,21 +27,21 @@
                                        href="#v-pills-profile"
                                        role="tab"
                                        aria-controls="v-pills-profile"
-                                       aria-selected="false">Aceptados</a>
+                                       aria-selected="false">Aceptados/Rechazados</a>
                                     <a class="nav-link nav-lateral"
                                        id="v-pills-messages-tab"
                                        data-toggle="pill"
                                        href="#v-pills-messages"
                                        role="tab" se
                                        aria-controls="v-pills-messages"
-                                       aria-selected="false">Sin revisar</a>
+                                       aria-selected="false">En revisión</a>
                                     <a class="nav-link nav-lateral"
                                        id="v-pills-settings-tab"
                                        data-toggle="pill"
                                        href="#v-pills-settings"
                                        role="tab"
                                        aria-controls="v-pills-settings"
-                                       aria-selected="false">Revisados</a>
+                                       aria-selected="false">En Cambios por el alumno</a>
                                     <a class="nav-link nav-lateral"
                                        id="v-pills-settings-retard-tab"
                                        data-toggle="pill"
@@ -49,9 +49,7 @@
                                        role="tab"
                                        aria-controls="v-pills-settings-retard"
                                        aria-selected="false">Completados</a>
-
                                 </div>
-
                             </div>
                             <div class="col">
                                 <div class="tab-content" id="v-pills-tabContent">

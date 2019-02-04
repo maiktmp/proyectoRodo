@@ -126,5 +126,14 @@ class User extends Authenticatable
         return $process !== null;
     }
 
+    public static function canReview($processId)
+    {
+        $userId = Auth::user()->id;
 
+        $count = ProcessHasUser::whereFkIdUser($userId)->count();
+        $reviews = ProcessHasDocument::whereHas('processHasUser', function ($q) use ($userId) {
+            $q->where('fk_id_user', $userId);
+        })->get()->count();
+        return $count > $reviews;
+    }
 }

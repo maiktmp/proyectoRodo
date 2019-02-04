@@ -1,11 +1,18 @@
 @php
     /* @var $document \App\Http\Model\Document */
+    /* @var $processHasDocument \App\Http\Model\ProcessHasDocument */
 @endphp
 
 @section('backButton')
-    <a href="{{route('process_student')}}">
-        <i class="fas fa-angle-left text-white" style="font-size: 1.5em"></i>
-    </a>
+    @if(Auth::user()->userType->id === \App\Http\Model\UserType::ADMIN)
+        <a href="{{route('get_process',['processId'=>$document->user->processHasUsers->fk_id_process])}}">
+            <i class="fas fa-angle-left text-white" style="font-size: 1.5em"></i>
+        </a>
+    @else
+        <a href="{{route('process_student')}}">
+            <i class="fas fa-angle-left text-white" style="font-size: 1.5em"></i>
+        </a>
+    @endif
 @endsection
 
 @extends('template.main')
@@ -68,7 +75,7 @@
                                 <div class="col-12 text-center">
                                     @if($processHasDocument->document_url!==null)
                                         <h5>Documento: </h5>
-                                        <a href="{{asset($document->url)}}">
+                                        <a href="{{asset($processHasDocument->document_url)}}">
                                             <i class="fas fa-file-word fa-2x"></i>
                                         </a>
                                     @endif
@@ -89,10 +96,8 @@
             @empty
             @endforelse
             @if(\App\Http\Model\User::isTeacher())
-                @if(\App\Http\Model\ProcessHasDocument::
-                whereHas('processHasUser',function ($q) use ($document){$q->where('fk_id_user',Auth::user()->id);})
-                ->where('fk_id_document',$document->id)
-                ->first() ===null  && \App\Http\Model\ProcessHasUser::whereFkIdUser(Auth::user()->id)->first()->active===1)
+                @if( \App\Http\Model\ProcessHasUser::whereFkIdUser(Auth::user()->id)->first()->active===1 &&
+                \App\Http\Model\User::canReview($document->user->processHasUsers->fk_id_process))
                     <div class="col-8 offset-2 my-2">
                         <div class="card">
                             <div class="card-body">
@@ -101,6 +106,17 @@
                                         {!! Form::open([
                                  'files'=>'true'
                                    ])!!}
+                                        <div class="row mt-2">
+                                            <div class="col-8 offset-2 text-left">
+                                                @include('components.form.select_group', [
+                                               'name' => 'fk_id_rol',
+                                               'label' => 'Rol',
+                                               'errors' => $errors,
+                                               'errorName' => "fk_id_rol",
+                                               'options'=>\App\Http\Model\Rol::asMapInProcess($document->user->processHasUsers->fk_id_rol,Auth::user()->id)
+                                       ])
+                                            </div>
+                                        </div>
                                         <div class="row mt-2">
                                             <div class="col-8 offset-2 text-left">
                                                 @include('components.form.select_group', [
