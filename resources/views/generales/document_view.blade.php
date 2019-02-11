@@ -102,6 +102,13 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
+                                    <div class="col-12">
+                                        @if($errors->has("general"))
+                                            <div class="alert alert-danger">{{$errors->first("general")}}</div>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col">
                                         {!! Form::open([
                                  'files'=>'true'

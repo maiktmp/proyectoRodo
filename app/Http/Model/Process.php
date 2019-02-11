@@ -157,7 +157,52 @@ class Process extends Model
         ProcessHasUser::whereFkIdUser($userId)
             ->where('fk_id_process', $processId)
             ->whereHas('revision.', function ($q) {
-                $q->where('id',Status::Recha);
+                $q->where('id', Status::Recha);
             });
+    }
+
+    /**
+     * @param $document Document
+     */
+    public function checkChangeStatus($document)
+    {
+        $reviwerCount = 0;
+        $reviwerAccept = 0;
+        $reviwerDecline = 0;
+
+        foreach ($this->hasUser as $processHasUser) {
+            $revision = ProcessHasDocument::whereFkIdDocument($document->id)
+                ->where('fk_id_process_has_user', $processHasUser->id)
+                ->first();
+
+            if ($processHasUser->fk_id_rol === Rol::REVISOR) {
+                $reviwerCount++;
+                if ($revision != null) {
+                    if ($revision->position->id === Position::ACEPTADO) {
+                        $reviwerAccept++;
+                    } else {
+                        $reviwerDecline++;
+                    }
+                }
+            }
+
+
+        }
+//        dd($reviwerCount . " " . $reviwerDecline . " " . $reviwerAccept);
+        if ($reviwerCount != 0) {
+            if ($reviwerAccept === $reviwerCount) {
+                $document->fk_id_status = Status::ACEPTADO;
+                $this->hasState()->attach(State::CONCLUIDO);
+                $this->fk_id_state = State::CONCLUIDO;
+//            $this->save();
+            }
+            if ($reviwerDecline === $reviwerCount) {
+                $document->fk_id_status = Status::RECHAZADO_REVISOR;
+                $this->hasState()->attach(State::EN_CORRECCION);
+                $this->fk_id_state = State::EN_CORRECCION;
+//            $this->save();
+            }
+        }
+
     }
 }

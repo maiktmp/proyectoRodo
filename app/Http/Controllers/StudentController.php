@@ -155,6 +155,14 @@ class StudentController extends Controller
         $fileOk = false;
         $docUrl = null;
         $document = Document::find($documentId);
+        if ($request->input('fk_id_rol') === Rol::REVISOR) {
+            if ($document->adviserReview()) {
+                $validator = Validator::make($request->all(), [], []);
+                $validator->getMessageBag()->add("general", "No se puedes definir tu posición hasta que el
+                asesor lo acepte");
+                return back()->withErrors($validator)->withInput();
+            }
+        }
         $processHasUser = ProcessHasUser::whereFkIdUser(Auth::user()->id)
             ->where('fk_id_rol', $request->input('fk_id_rol'))
             ->first();
@@ -207,29 +215,29 @@ class StudentController extends Controller
                 $processHasUser->process->hasState()->attach(State::EN_CORRECCION);
                 $processHasUser->process->fk_id_state = State::EN_CORRECCION;
             }
+            $processHasUser->process->checkChangeStatus($document);
             /**
              *
              */
-            if (request('fk_id_position') * 1 === Position::RECHAZADO && User::userReviewerProcess($processHasUser->process->id)) {
-                $document->fk_id_status = Status::RECHAZADO_REVISOR;
-                $processHasUser->process->hasState()->attach(State::EN_CORRECCION);
-                $processHasUser->process->fk_id_state = State::EN_CORRECCION;
-            }
-
-            $countOk = $document->processHasDocuments()->where('fk_id_position', Position::ACEPTADO)->count();
-            if ($countOk >= 3) {
-                $document->fk_id_status = Status::ACEPTADO;
-                $processHasUser->process->hasState()->attach(State::CONCLUIDO);
-                $processHasUser->process->fk_id_state = State::CONCLUIDO;
-            }
+            //            if (request('fk_id_position') * 1 === Position::RECHAZADO && User::userReviewerProcess($processHasUser->process->id)) {
+//                $document->fk_id_status = Status::RECHAZADO_REVISOR;
+////                $processHasUser->process->hasState()->attach(State::EN_CORRECCION);
+////                $processHasUser->process->fk_id_state = State::EN_CORRECCION;
+//                $processHasUser->process->checkChangeStatus($document);
+//            }
+//
+//            $countOk = $document->processHasDocuments()->where('fk_id_position', Position::ACEPTADO)->count();
+//            if ($countOk >= 3) {
+////                $document->fk_id_status = Status::ACEPTADO;
+////                $processHasUser->process->hasState()->attach(State::CONCLUIDO);
+////                $processHasUser->process->fk_id_state = State::CONCLUIDO;
+//                $processHasUser->process->checkChangeStatus($document);
+//            }
             $transactionOk = $transactionOk && $document->save();
             $transactionOk = $transactionOk && $processHasUser->process->save();
             if ($transactionOk) {
                 return back();
             }
         }
-
     }
-
-
 }

@@ -137,7 +137,10 @@
                                                 'processHasUserId'=>$processHasUser->id,
                                                 'state'=>$processHasUser->active?0:1
                                                 ])}}">
-                                                    <i class="fas {{$processHasUser->active?'fa-toggle-on':'fa-toggle-off'}}"
+                                                    <i class="fas {{$processHasUser->active?'fa-toggle-on':'fa-toggle-off'}} text-danger"
+                                                       data-toggle="tooltip"
+                                                       data-placement="top"
+                                                       title="{{$processHasUser->active?'Desactivar y sancionar ':'Activar'}}"
                                                        style="font-size: 1.5em"></i>
                                                 </a>
                                                 &nbsp;

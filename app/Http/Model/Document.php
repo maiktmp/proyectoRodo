@@ -64,6 +64,7 @@ class Document extends Model
             'id'
         );
     }
+
     public function user()
     {
         return $this->belongsTo(
@@ -73,4 +74,14 @@ class Document extends Model
         );
     }
 
+    public function adviserReview()
+    {
+        $documentOk = true;
+        foreach ($this->processHasDocuments as $revision) {
+            if ($revision->processHasUser->rol === Rol::ASESOR) {
+                $documentOk && Position::ACEPTADO;
+            }
+        }
+        return $documentOk;
+    }
 }

@@ -22,9 +22,9 @@ $(document).ready(function () {
     $('#select_rol').change(function () {
         var val = $(this).val() * 1;
         if (val === 2) {
-            $("#deliveryDate").attr('disabled', true);
+            // $("#deliveryDate").attr('disabled', true);
         } else {
-            $("#deliveryDate").attr('disabled', false);
+            // $("#deliveryDate").attr('disabled', false);
         }
     });
 

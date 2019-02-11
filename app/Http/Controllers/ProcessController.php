@@ -58,7 +58,7 @@ class ProcessController extends Controller
                 }
             } else {
                 $process = Process::find($processId);
-                if ($process->state !== State::EN_REVISION) {
+                if ($process->state !== State::EN_REVISION && $request->input('delivery_date', null) !== null) {
                     $validator = Validator::make([], []);
                     $validator->getMessageBag()->add('general', "No se puede asignar la fecha hasta que el asesor acepte el documento");
                     return back()
