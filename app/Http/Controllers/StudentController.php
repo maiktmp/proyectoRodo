@@ -163,6 +163,7 @@ class StudentController extends Controller
                 return back()->withErrors($validator)->withInput();
             }
         }
+//        return dd("no");
         $processHasUser = ProcessHasUser::whereFkIdUser(Auth::user()->id)
             ->where('fk_id_rol', $request->input('fk_id_rol'))
             ->first();
