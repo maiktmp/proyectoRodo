@@ -28,7 +28,7 @@
                                     <th>Docente</th>
                                     <th>Rol</th>
                                     <th>Alumno involucrado</th>
-                                    <th>Última versión del alumno</th>
+                                    <th>Última versión del docente</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -37,10 +37,14 @@
                                         <td>{{$user->user->getFullNameAttribute()}}</td>
                                         <td>{{$user->rol->name}}</td>
                                         <td>{{$user->process->getStudent()->user->getFullNameAttribute()}}</td>
-                                        <td class="text-center"><a
-                                                    href="{{asset($user->process->getStudent()->user->documents->last()->url)}}">
-                                                <i class="fas fa-file-word fa-2x"></i>
-                                            </a></td>
+                                        @if($user->hasDocuments->last()->document_url !== null)
+                                            <td class="text-center"><a
+                                                        href="{{asset($user->hasDocuments->last()->document_url)}}">
+                                                    <i class="fas fa-file-word fa-2x"></i>
+                                                </a></td>
+                                        @else
+                                            <td class="text-center">---</td>
+                                        @endif
                                     </tr>
                                 @empty
                                     <tr>
