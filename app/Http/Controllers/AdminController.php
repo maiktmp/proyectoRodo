@@ -11,9 +11,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Model\Involucrado;
 use App\Http\Model\Proceso;
+use App\Http\Model\Process;
+use App\Http\Model\ProcessHasUser;
 use App\Http\Model\Profesor;
 use App\Http\Model\RevisionAsesor;
-use DB;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -88,5 +89,22 @@ class AdminController extends Controller
     public function getTeachers()
     {
         return Profesor::all();
+    }
+
+    public function getStatusTeachers($processId)
+    {
+        if ($processId == 0) {
+            $users = ProcessHasUser::where('active', false)
+                ->get();
+        } else {
+            $users = ProcessHasUser::whereFkIdProcess($processId)
+                ->where('active', false)
+                ->get();
+        }
+
+        return view('admin.user_disabled', [
+            "users" => $users,
+            "processId" => $processId
+        ]);
     }
 }

@@ -196,13 +196,25 @@ class Process extends Model
                 $this->fk_id_state = State::CONCLUIDO;
 //            $this->save();
             }
+
             if ($reviwerDecline === $reviwerCount) {
                 $document->fk_id_status = Status::RECHAZADO_REVISOR;
                 $this->hasState()->attach(State::EN_CORRECCION);
                 $this->fk_id_state = State::EN_CORRECCION;
 //            $this->save();
             }
+            if ($reviwerDecline !== 0 && $reviwerAccept !== 0) {
+                if (($reviwerDecline + $reviwerAccept) === $reviwerCount) {
+                    $document->fk_id_status = Status::RECHAZADO_REVISOR;
+                    $this->hasState()->attach(State::EN_CORRECCION);
+                    $this->fk_id_state = State::EN_CORRECCION;
+                }
+            }
         }
+    }
 
+    public function getStudent()
+    {
+        return $this->hasUser()->where('fk_id_rol', Rol::ESTUDIANTE)->first();
     }
 }

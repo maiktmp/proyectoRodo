@@ -120,6 +120,17 @@ class CreateUsersTable extends Migration
                 ->on('rol');
 
         });
+//
+//        Schema::create('sancion', function (Blueprint $table) {
+//            $table->increments('id');
+//            $table->boolean("type");
+//            $table->unsignedInteger('fk_id_process_has_user');
+//
+//            $table->foreign('fk_id_process_has_user')
+//                ->references('id')
+//                ->on('process_has_user');
+//        });
+
 
         Schema::create('document', function (Blueprint $table) {
             $table->increments('id');

@@ -37,10 +37,18 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-11 text-center">
+                            <div class="col-10 text-center">
                                 Detalles del proceso
                             </div>
                             @if(\App\Http\Model\User::isAdmin())
+                                <div class="col">
+                                    <a data-toggle="tooltip"
+                                       data-placement="top"
+                                       title="Usuarios Sancionados"
+                                       href="{{route('teachers_status',['processId'=>$process->id])}}">
+                                        <i class="fas fa-user-slash" style="font-size: 1.5em"></i>
+                                    </a>
+                                </div>
                                 <div class="col">
                                     <a data-toggle="tooltip"
                                        data-placement="top"

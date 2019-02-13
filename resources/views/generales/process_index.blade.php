@@ -56,6 +56,9 @@
                                        role="tab"
                                        aria-controls="v-pills-settings-end"
                                        aria-selected="false">Concluido</a>
+                                    <a class="nav-link nav-lateral"
+                                       href="{{route('teachers_status',['processId'=>0])}}"
+                                       aria-selected="false">Sancionados</a>
                                 </div>
 
                                 </div>

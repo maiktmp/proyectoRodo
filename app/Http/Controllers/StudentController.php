@@ -155,8 +155,8 @@ class StudentController extends Controller
         $fileOk = false;
         $docUrl = null;
         $document = Document::find($documentId);
-        if ($request->input('fk_id_rol') === Rol::REVISOR) {
-            if ($document->adviserReview()) {
+        if ($request->input('fk_id_rol')*1 === Rol::REVISOR) {
+            if (!$document->adviserReview()) {
                 $validator = Validator::make($request->all(), [], []);
                 $validator->getMessageBag()->add("general", "No se puedes definir tu posición hasta que el
                 asesor lo acepte");

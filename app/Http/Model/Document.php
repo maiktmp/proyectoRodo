@@ -78,8 +78,8 @@ class Document extends Model
     {
         $documentOk = true;
         foreach ($this->processHasDocuments as $revision) {
-            if ($revision->processHasUser->rol === Rol::ASESOR) {
-                $documentOk && Position::ACEPTADO;
+            if ($revision->processHasUser->rol->id === Rol::ASESOR) {
+                $documentOk = $documentOk && $revision->position->id === Position::ACEPTADO;
             }
         }
         return $documentOk;
