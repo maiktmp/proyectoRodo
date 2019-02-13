@@ -37,13 +37,15 @@
                                         <td>{{$user->user->getFullNameAttribute()}}</td>
                                         <td>{{$user->rol->name}}</td>
                                         <td>{{$user->process->getStudent()->user->getFullNameAttribute()}}</td>
-                                        @if($user->hasDocuments->last()->document_url !== null)
-                                            <td class="text-center"><a
-                                                        href="{{asset($user->hasDocuments->last()->document_url)}}">
-                                                    <i class="fas fa-file-word fa-2x"></i>
-                                                </a></td>
-                                        @else
-                                            <td class="text-center">---</td>
+                                        @if($user->hasDocuments->count() >0)
+                                            @if($user->hasDocuments->last()->document_url !== null)
+                                                <td class="text-center"><a
+                                                            href="{{asset($user->hasDocuments->last()->document_url)}}">
+                                                        <i class="fas fa-file-word fa-2x"></i>
+                                                    </a></td>
+                                            @else
+                                                <td class="text-center">---</td>
+                                            @endif
                                         @endif
                                     </tr>
                                 @empty
