@@ -76,10 +76,11 @@ class Document extends Model
 
     public function adviserReview()
     {
-        $documentOk = true;
+        $documentOk = false;
         foreach ($this->processHasDocuments as $revision) {
             if ($revision->processHasUser->rol->id === Rol::ASESOR) {
-                $documentOk = $documentOk && $revision->position->id === Position::ACEPTADO;
+                $documentOk = $revision->position->id === Position::ACEPTADO;
+                break;
             }
         }
         return $documentOk;

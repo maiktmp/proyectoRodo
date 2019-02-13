@@ -155,7 +155,7 @@ class StudentController extends Controller
         $fileOk = false;
         $docUrl = null;
         $document = Document::find($documentId);
-        if ($request->input('fk_id_rol')*1 === Rol::REVISOR) {
+        if ($request->input('fk_id_rol') * 1 === Rol::REVISOR) {
             if (!$document->adviserReview()) {
                 $validator = Validator::make($request->all(), [], []);
                 $validator->getMessageBag()->add("general", "No se puedes definir tu posición hasta que el
@@ -189,31 +189,30 @@ class StudentController extends Controller
             /**
              *
              */
-            if (request('fk_id_position') * 1 === Position::ACEPTADO && User::userAdviserProcess($processHasUser->process->id)) {
-                $document->fk_id_status = Status::ACEPTADO_ASESOR;
-                $processHasUser->process->hasState()->attach(State::EN_REVISION);
-                $processHasUser->process->fk_id_state = State::EN_REVISION;
-                $date = Carbon::now();
-                for ($i = 0; $i < 10; $i++) {
-                    $date->addDay();
-                    $day = $date->dayOfWeek;
-                    if ($day === 0 || $day === 6) {
-                        $i--;
+            if ($request->input('fk_id_rol') * 1 === Rol::ASESOR) {
+                if (request('fk_id_position') * 1 === Position::ACEPTADO && User::userAdviserProcess($processHasUser->process->id)) {
+                    $document->fk_id_status = Status::ACEPTADO_ASESOR;
+                    $processHasUser->process->hasState()->attach(State::EN_REVISION);
+                    $processHasUser->process->fk_id_state = State::EN_REVISION;
+                    $date = Carbon::now();
+                    for ($i = 0; $i < 10; $i++) {
+                        $date->addDay();
+                        $day = $date->dayOfWeek;
+                        if ($day === 0 || $day === 6) {
+                            $i--;
+                        }
                     }
+                    $processHasUsers = ProcessHasUser::where('fk_id_rol', Rol::REVISOR)->get();
+                    $processHasUsers->each(function ($processHasUser) use ($date) {
+                        $processHasUser->delivery_date = $date;
+                        $processHasUser->save();
+                    });
                 }
-                $processHasUsers = ProcessHasUser::where('fk_id_rol', Rol::REVISOR)->get();
-                $processHasUsers->each(function ($processHasUser) use ($date) {
-                    $processHasUser->delivery_date = $date;
-                    $processHasUser->save();
-                });
-            }
-            /**
-             *
-             */
-            if (request('fk_id_position') * 1 === Position::RECHAZADO && User::userAdviserProcess($processHasUser->process->id)) {
-                $document->fk_id_status = Status::RECHAZADO_ASESOR;
-                $processHasUser->process->hasState()->attach(State::EN_CORRECCION);
-                $processHasUser->process->fk_id_state = State::EN_CORRECCION;
+                if (request('fk_id_position') * 1 === Position::RECHAZADO && User::userAdviserProcess($processHasUser->process->id)) {
+                    $document->fk_id_status = Status::RECHAZADO_ASESOR;
+                    $processHasUser->process->hasState()->attach(State::EN_CORRECCION);
+                    $processHasUser->process->fk_id_state = State::EN_CORRECCION;
+                }
             }
             $processHasUser->process->checkChangeStatus($document);
             /**

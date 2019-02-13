@@ -96,8 +96,9 @@
             @empty
             @endforelse
             @if(\App\Http\Model\User::isTeacher())
-                @if( \App\Http\Model\ProcessHasUser::whereFkIdUser(Auth::user()->id)->first()->active===1 &&
-                \App\Http\Model\User::canReview($document->user->processHasUsers->fk_id_process))
+                @if( \App\Http\Model\ProcessHasUser::whereFkIdUser(Auth::user()->id)->first()->active===1
+                && \App\Http\Model\User::canReview($document->id)
+                )
                     <div class="col-8 offset-2 my-2">
                         <div class="card">
                             <div class="card-body">
