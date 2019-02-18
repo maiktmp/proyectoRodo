@@ -87,8 +87,10 @@ class ProcessController extends Controller
             $processHasUser = ProcessHasUser::find($processHasUserId);
         } else {
             $processHasUser = new ProcessHasUser();
-            $process->hasState()->attach(State::PENDIENTE_ASESOR);
-            $process->fk_id_state = State::PENDIENTE_ASESOR;
+            if ($process->hasReviwer() === null) {
+                $process->hasState()->attach(State::PENDIENTE_ASESOR);
+                $process->fk_id_state = State::PENDIENTE_ASESOR;
+            }
             $process->save();
         }
         $processHasUser->fill($request->all());

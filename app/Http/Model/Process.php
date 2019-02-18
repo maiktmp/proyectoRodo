@@ -217,4 +217,9 @@ class Process extends Model
     {
         return $this->hasUser()->where('fk_id_rol', Rol::ESTUDIANTE)->first();
     }
+
+    public function hasReviwer()
+    {
+        return $this->hasUser()->where('fk_id_rol', Rol::ASESOR)->first();
+    }
 }
