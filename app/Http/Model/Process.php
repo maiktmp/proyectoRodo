@@ -174,8 +174,7 @@ class Process extends Model
             $revision = ProcessHasDocument::whereFkIdDocument($document->id)
                 ->where('fk_id_process_has_user', $processHasUser->id)
                 ->first();
-
-            if ($processHasUser->fk_id_rol === Rol::REVISOR) {
+            if ($processHasUser->fk_id_rol === Rol::REVISOR && $processHasUser->active === 1) {
                 $reviwerCount++;
                 if ($revision != null) {
                     if ($revision->position->id === Position::ACEPTADO) {
@@ -185,6 +184,7 @@ class Process extends Model
                     }
                 }
             }
+//            return dd("ok");
 
 
         }
