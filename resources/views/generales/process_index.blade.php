@@ -61,7 +61,7 @@
                                        aria-selected="false">Sancionados</a>
                                 </div>
 
-                                </div>
+                            </div>
 
                             <div class="col">
                                 <div class="tab-content" id="v-pills-tabContent">
@@ -91,7 +91,10 @@
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-settings-end" role="tabpanel"
                                          aria-labelledby="v-pills-settings-end-tab">
-                                        @include('generales._table_process',['process'=>\App\Http\Model\Process::sixtFilter()])
+                                        @include('generales._table_process',[
+                                        'process'=>\App\Http\Model\Process::sixtFilter(),
+                                        'pdf'=>true
+                                        ])
                                     </div>
                                 </div>
                             </div>

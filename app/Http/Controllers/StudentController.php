@@ -40,11 +40,13 @@ class StudentController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
+                'name' => 'required',
                 'url' => 'required|mimes:doc,docx',
                 'comments' => 'max:1000,',
 
             ],
             [
+                'name.required' => 'Ingresa el nombre del proyecto.',
                 'url.required' => 'Ingresa el docuento de word.',
                 'url.mimetypes' => 'Ingresa un archivo de word.',
                 'comments.max' => 'Ingresa un comentario más pequeño',
@@ -84,6 +86,7 @@ class StudentController extends Controller
                     $created = true;
                 } else {
                     $process = new Process();
+                    $process->name = \request('name');
                     $process->begin_date = Carbon::now();
                     $process->fk_id_state = State::PENDIENTE;
                 }

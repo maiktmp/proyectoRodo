@@ -10,6 +10,7 @@
                     <th scope="col">Asesores</th>
                     <th scope="col">Revisores</th>
                     <th scope="col">Fecha de inicio</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -39,6 +40,13 @@
                             </ul>
                         </th>
                         <th scope="col">{{\App\Services\DateFormatterService::fullDate($processIter->begin_date)}}</th>
+                        <th>
+                            @if(isset($pdf))
+                                <a href="{{route('pdf',["processId"=>$processIter->id])}}">
+                                    <i class="fas fa-file-signature fa-2x text-primary"></i>
+                                </a>
+                            @endif
+                        </th>
                     </tr>
                 @empty
                     <tr>

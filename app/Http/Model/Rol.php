@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property string $name
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Rol whereName($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Http\Model\ProcessHasUser[] $process
  */
 class Rol extends Model
 {

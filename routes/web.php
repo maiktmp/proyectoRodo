@@ -104,3 +104,7 @@ Route::get(
     'process/{processId}/status',
     'AdminController@getStatusTeachers')
     ->name('teachers_status');
+
+Route::get('/pdf/{processId}',
+    "PdfController@pdf")
+    ->name("pdf");

@@ -44,14 +44,16 @@ class DatabaseSeeder extends Seeder
 
         $faker = \Faker\Factory::create('es_MX');
         DB::table('user')->insert([
-            [
-                'name' => 'Miguel',
-                'last_name' => 'Pereira Suarez',
-                'username' => 'alu_14280487',
-                'password' => bcrypt('pw0000'),
-                'email' => "aluItt@ittol.com.mx",
-                'fk_id_user_type' => "2",
-            ],
+            'name' => 'Miguel',
+            'last_name' => 'Pereira Suarez',
+            'username' => 'alu_14280487',
+            'password' => bcrypt('pw0000'),
+            'email' => "aluItt@ittol.com.mx",
+            'no_control' => "14280487",
+            'carrera' => "Ing. en Sistemas Computacionales ",
+            'fk_id_user_type' => "2",
+        ]);
+        DB::table('user')->insert([
             [
                 'name' => $faker->firstName,
                 'last_name' => $faker->lastName,

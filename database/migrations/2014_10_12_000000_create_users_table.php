@@ -25,6 +25,8 @@ class CreateUsersTable extends Migration
             $table->string('username');
             $table->string('password');
             $table->string('email');
+            $table->string('no_control')->nullable();
+            $table->string('carrera')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->unsignedInteger('fk_id_user_type');
@@ -40,6 +42,7 @@ class CreateUsersTable extends Migration
 
         Schema::create('process', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
             $table->date('begin_date');
             $table->date('state_date');
             $table->boolean('active')->default(true);

@@ -40,6 +40,16 @@
                                   ])
                             </div>
                         </div>
+                        <div class="row mt-2">
+                            <div class="col-8 offset-2 text-left">
+                                @include('components.form.text_group', [
+                                      'name' => 'name',
+                                      'label' => 'Nombre del proyecto',
+                                      'errors' => $errors,
+                                      'errorName' => 'name'
+                                  ])
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-8 offset-2 text-left">
                                 @include('components.form.textarea_group', [

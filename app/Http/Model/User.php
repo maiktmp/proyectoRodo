@@ -45,6 +45,10 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Http\Model\Document[] $documents
  * @property-read mixed $full_name
+ * @property string|null $no_control
+ * @property string|null $carrera
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User whereCarrera($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\User whereNoControl($value)
  */
 class User extends Authenticatable
 {

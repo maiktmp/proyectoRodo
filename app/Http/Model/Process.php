@@ -38,6 +38,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \App\Http\Model\State $state
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Process whereActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Process whereFkIdState($value)
+ * @property string $name
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Process whereName($value)
  */
 class Process extends Model
 {
@@ -135,6 +137,14 @@ class Process extends Model
         })->where('fk_id_state', State::CONCLUIDO)->get();
     }
 
+    /**
+     * @return ProcessHasUser
+     */
+    public function getStudent()
+    {
+        return $this->hasUser()->where('fk_id_rol', Rol::ESTUDIANTE)->first();
+    }
+
 
     public static function adviserNotView()
     {
@@ -213,7 +223,7 @@ class Process extends Model
         }
     }
 
-    public function getStudent()
+    public function getUserStudent()
     {
         return $this->hasUser()->where('fk_id_rol', Rol::ESTUDIANTE)->first();
     }
