@@ -4,14 +4,18 @@
 @extends('template.main')
 @section('title', 'Revisiones')
 @section('navbarTitle', 'Revisiones')
-
+@section('backButton')
+    <a href="{{route('get_process',['processId'=>$processId])}}">
+        <i class="fas fa-angle-left text-white" style="font-size: 1.5em"></i>
+    </a>
+@endsection
 @section('content')
     <div class="container-fluid">
         <div class="row">
-            <div class="col-8 offset-2">
+            <div class="col-4 offset-4">
                 <div class="card my-3">
                     <div class="card-header text-center bg-primary">
-                        <h3 class="text-white">Revisión {{Auth::user()->documents()->count()+1}}</h3>
+                        <h3 class="text-white">Parámetros del proceso</h3>
                     </div>
                     <div class="row">
                         @if ($errors->has('general'))
@@ -29,31 +33,31 @@
                         {!! Form::open([
                         'files'=>'true'
                           ])!!}
-                        <div class="row mt-2">
-                            <div class="col-8 offset-2 text-left">
-                                @include('components.form.file_group', [
-                                      'name' => 'url',
-                                      'label' => 'Documento',
-                                      'labelClass' => 'lbl-doc',
+                        <div class="row">
+                            <div class="col-12 text-left">
+                                @include('components.form.text_group', [
+                                      'name' => 'name',
+                                      'label' => 'Nombre del proyecto',
                                       'errors' => $errors,
-                                      'errorName' => 'url'
+                                      'errorName' => 'name',
+                                      'value'=>\App\Http\Model\Process::find($processId)->name
                                   ])
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-8 offset-2 text-left">
-                                @include('components.form.textarea_group', [
-                                      'name' => 'comments',
-                                      'label' => 'Comentarios',
-                                      'rows'=>5,
+                            <div class="col-12 text-left">
+                                @include('components.form.text_group', [
+                                      'name' => 'product',
+                                      'label' => 'Producto',
                                       'errors' => $errors,
-                                      'errorName' => 'comments'
+                                      'errorName' => 'product',
+                                      'value'=>\App\Http\Model\Process::find($processId)->producto
                                   ])
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12 text-center">
-                                <button class="btn btn-primary" type="submit">Enviar documento al asesor</button>
+                                <button class="btn btn-primary" type="submit">Asignar</button>
                             </div>
                         </div>
                         {!! Form::close()!!}
@@ -64,12 +68,5 @@
     </div>
 @endsection
 @push('scripts')
-    <script>
-        $(document).ready(function () {
-            $('input[type="file"]').change(function (e) {
-                var fileName = e.target.files[0].name;
-                $('.lbl-doc').html(fileName);
-            });
-        });
-    </script>
+
 @endpush

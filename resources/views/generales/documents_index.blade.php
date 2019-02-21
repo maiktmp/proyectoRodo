@@ -57,6 +57,14 @@
                                         <i class="fas fa-users-cog" style="font-size: 1.5em"></i>
                                     </a>
                                 </div>
+                                <div class="col">
+                                    <a data-toggle="tooltip"
+                                       data-placement="top"
+                                       title="Parametros del proceso"
+                                       href="{{route('config_parameters',['processId'=>$process->id])}}">
+                                        <i class="fas fa-cogs"></i>
+                                    </a>
+                                </div>
                             @elseif(\App\Http\Model\User::isStudent() && $process->state->id === \App\Http\Model\State::EN_CORRECCION )
                                 <a data-toggle="tooltip"
                                    data-placement="top"

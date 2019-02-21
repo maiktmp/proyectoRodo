@@ -42,7 +42,8 @@ class CreateUsersTable extends Migration
 
         Schema::create('process', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('name')->nullable();
+            $table->string('producto')->nullable();
             $table->date('begin_date');
             $table->date('state_date');
             $table->boolean('active')->default(true);

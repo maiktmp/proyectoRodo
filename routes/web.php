@@ -84,11 +84,20 @@ Route::get(
     'ProcessController@changeStatus'
 )->name('update_process_changeStatus');
 
-
 Route::get(
     'admin/process/teachers',
     'ProcessController@getTeachers'
 )->name('update_teachers');
+
+Route::get(
+    'admin/process/{processId}/config',
+    'AdminController@parameters'
+)->name('config_parameters');
+
+Route::post(
+    'admin/process/{processId}/config',
+    'AdminController@postParameters'
+)->name('config_parameters_post');
 
 
 //==========================================

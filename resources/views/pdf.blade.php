@@ -67,7 +67,7 @@
         </tr>
         <tr>
             <td style="width: 200px"><b>d) Producto: </b></td>
-            <td style="width: 450px;">PROYECTO</td>
+            <td style="width: 450px;">{{$process->producto}}</td>
         </tr>
         </tbody>
     </table>

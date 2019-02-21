@@ -108,4 +108,36 @@ class AdminController extends Controller
         ]);
     }
 
+    public function parameters($processId)
+    {
+        return view("admin.parameters", ["processId" => $processId]);
+    }
+
+    public function postParameters(Request $request, $processId)
+    {
+        $rules = [
+            "name" => "required",
+            "product" => "required"
+        ];
+        $messages = [
+            "name.required" => "El nombre del proyecto es requerido",
+            "product.required" => "El producto es requerido"
+        ];
+        \Validator::make(
+            $request->all(),
+            $rules,
+            $messages
+        )->validate();
+        $process = Process::find($processId);
+        $process->producto = $request->get('product');
+        $process->name = $request->get('name');
+        try {
+            $process->saveOrFail();
+            return redirect()->route('get_process',['processId'=>$processId]);
+        } catch (\Throwable $e) {
+            return back()->withInput()->withErrors([
+                "general" => "No se pudo asiganr los valores " . " " . $e->getMessage()
+            ]);
+        }
+    }
 }
