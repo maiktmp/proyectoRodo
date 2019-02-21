@@ -16,6 +16,7 @@ class PdfController extends Controller
 
     public function pdf($processId)
     {
+        ini_set('max_execution_time', 300);
         $process = App\Http\Model\Process::find($processId);
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadView("pdf", ["process" => $process]);
