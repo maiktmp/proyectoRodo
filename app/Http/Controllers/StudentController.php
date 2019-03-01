@@ -37,14 +37,18 @@ class StudentController extends Controller
 
     public function revisionPost(Request $request)
     {
+        $rules = [
+            'url' => 'required|mimes:doc,docx',
+            'comments' => 'max:1000,',
+        ];
+        if (Auth::user()->documents()->count() === 0) {
+            $rules['producto'] = 'required';
+        }
         $validator = Validator::make(
             $request->all(),
+            $rules,
             [
-                'url' => 'required|mimes:doc,docx',
-                'comments' => 'max:1000,',
-
-            ],
-            [
+                'producto.required' => 'Ingresa el la opción de titulación.',
                 'url.required' => 'Ingresa el docuento de word.',
                 'url.mimetypes' => 'Ingresa un archivo de word.',
                 'comments.max' => 'Ingresa un comentario más pequeño',
@@ -69,7 +73,8 @@ class StudentController extends Controller
                     $request->file('url'),
                     Auth::user()->id,
                     $document->no_document,
-                    Auth::user()->full_name
+                    Auth::user()->full_name,
+                    'version_'
                 );
                 $document->url = $docUrl;
                 $transactionOk = $transactionOk && $document->save();
@@ -84,8 +89,10 @@ class StudentController extends Controller
                     $created = true;
                 } else {
                     $process = new Process();
+                    $process->producto = \request('producto');
                     $process->begin_date = Carbon::now();
-                    $process->fk_id_state = State::PENDIENTE;
+                    $process->hasState()->attach(State::PENDIENTE_ASESOR);
+                    $process->fk_id_state = State::PENDIENTE_ASESOR;
                 }
                 $process->state_date = Carbon::now();
                 $transactionOk = $transactionOk && $process->save();
@@ -95,6 +102,13 @@ class StudentController extends Controller
                     $processHasUser->fk_id_user = $alumno->id;
                     $processHasUser->fk_id_process = $process->id;
                     $processHasUser->fk_id_rol = Rol::ESTUDIANTE;
+                    $transactionOk = $transactionOk && $processHasUser->save();
+                }
+                if ($transactionOk && !$created) {
+                    $processHasUser = new ProcessHasUser();
+                    $processHasUser->fk_id_user = \request('fk_id_user');
+                    $processHasUser->fk_id_process = $process->id;
+                    $processHasUser->fk_id_rol = Rol::ASESOR;
                     $transactionOk = $transactionOk && $processHasUser->save();
                 }
             }
@@ -116,10 +130,10 @@ class StudentController extends Controller
         }
     }
 
-    private function storeDocx($file, $alumnoId, $noRevision, $fullName)
+    private function storeDocx($file, $alumnoId, $noRevision, $fullName, $title)
     {
         $path = '/docx/student' . $alumnoId;
-        $name = 'version_' . $noRevision . '_' . snake_case($fullName) . "_" . Carbon::now()->format('Y-m-d') . "." . $file->extension();
+        $name = $title . $noRevision . '_' . snake_case($fullName) . "_" . Carbon::now()->format('Y-m-d') . "." . $file->extension();
 
         // Create path if does not exists
         if (!file_exists(public_path() . $path)) {
@@ -151,22 +165,29 @@ class StudentController extends Controller
 
     public function viewDocumentPost(Request $request, $documentId)
     {
-        $transactionOk = false;
+        $transactionOk = true;
         $fileOk = false;
         $docUrl = null;
+        $validator = Validator::make($request->all(), [], []);
         $document = Document::find($documentId);
         if ($request->input('fk_id_rol') * 1 === Rol::REVISOR) {
             if (!$document->adviserReview()) {
-                $validator = Validator::make($request->all(), [], []);
                 $validator->getMessageBag()->add("general", "No se puedes definir tu posición hasta que el
                 asesor lo acepte");
                 return back()->withErrors($validator)->withInput();
             }
         }
-//        return dd("no");
+
+        if ($request->input('fk_id_position') * 1 === Position::RECHAZADO &&
+            \request('doc_url', null) === null) {
+            $validator->getMessageBag()->add("general",
+                "Al rechazar esta versión debes subir un documento con sus respectuvas observacones");
+            return back()->withErrors($validator)->withInput();
+        }
         $processHasUser = ProcessHasUser::whereFkIdUser(Auth::user()->id)
-            ->where('fk_id_rol', $request->input('fk_id_rol'))
+            ->where('fk_id_process', $document->user->processHasUsers->fk_id_process)
             ->first();
+
         if (request('doc_url') !== null) {
             $fileOk = $request->hasFile('doc_url') &&
                 $request->file('doc_url')->isValid();
@@ -176,7 +197,8 @@ class StudentController extends Controller
                 $request->file('doc_url'),
                 Auth::user()->id,
                 $document->no_document,
-                Auth::user()->full_name
+                Auth::user()->full_name,
+                'revisión_'
             );
         }
         $processHasDocument = new ProcessHasDocument();
@@ -190,8 +212,8 @@ class StudentController extends Controller
             /**
              *
              */
-            if ($request->input('fk_id_rol') * 1 === Rol::ASESOR) {
-                if (request('fk_id_position') * 1 === Position::ACEPTADO && User::userAdviserProcess($processHasUser->process->id)) {
+            if (User::userAdviserProcess($processHasUser->process->id)) {
+                if (request('fk_id_position') * 1 === Position::ACEPTADO) {
                     $document->fk_id_status = Status::ACEPTADO_ASESOR;
                     $processHasUser->process->hasState()->attach(State::EN_REVISION);
                     $processHasUser->process->fk_id_state = State::EN_REVISION;
@@ -209,7 +231,7 @@ class StudentController extends Controller
                         $processHasUser->save();
                     });
                 }
-                if (request('fk_id_position') * 1 === Position::RECHAZADO && User::userAdviserProcess($processHasUser->process->id)) {
+                if (request('fk_id_position') * 1 === Position::RECHAZADO) {
                     $document->fk_id_status = Status::RECHAZADO_ASESOR;
                     $processHasUser->process->hasState()->attach(State::EN_CORRECCION);
                     $processHasUser->process->fk_id_state = State::EN_CORRECCION;

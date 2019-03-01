@@ -134,10 +134,15 @@ class User extends Authenticatable
     {
         $userId = Auth::user()->id;
         $count = ProcessHasUser::whereFkIdUser($userId)->count();
-        $reviews = ProcessHasDocument::whereHas('processHasUser', function ($q) use ($userId,$documentId) {
+        $reviews = ProcessHasDocument::whereHas('processHasUser', function ($q) use ($userId, $documentId) {
             $q->where('fk_id_user', $userId)
-               ->where('fk_id_document', $documentId);
+                ->where('fk_id_document', $documentId);
         })->get()->count();
         return $count > $reviews;
+    }
+
+    public static function getTeachers()
+    {
+        return self::whereFkIdUserType(UserType::PROFESOR)->get()->pluck('full_name', 'id');
     }
 }

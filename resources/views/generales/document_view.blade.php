@@ -98,6 +98,7 @@
             @if(\App\Http\Model\User::isTeacher())
                 @if( \App\Http\Model\ProcessHasUser::whereFkIdUser(Auth::user()->id)->first()->active===1
                 && \App\Http\Model\User::canReview($document->id)
+                && $document->isActive()
                 )
                     <div class="col-8 offset-2 my-2">
                         <div class="card">
@@ -114,17 +115,6 @@
                                         {!! Form::open([
                                  'files'=>'true'
                                    ])!!}
-                                        <div class="row mt-2">
-                                            <div class="col-8 offset-2 text-left">
-                                                @include('components.form.select_group', [
-                                               'name' => 'fk_id_rol',
-                                               'label' => 'Rol',
-                                               'errors' => $errors,
-                                               'errorName' => "fk_id_rol",
-                                               'options'=>\App\Http\Model\Rol::asMapInProcess($document->user->processHasUsers->fk_id_rol,Auth::user()->id)
-                                       ])
-                                            </div>
-                                        </div>
                                         <div class="row mt-2">
                                             <div class="col-8 offset-2 text-left">
                                                 @include('components.form.select_group', [

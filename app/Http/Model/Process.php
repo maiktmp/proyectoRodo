@@ -40,6 +40,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Process whereFkIdState($value)
  * @property string $name
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Process whereName($value)
+ * @property string|null $producto
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Http\Model\Process whereProducto($value)
  */
 class Process extends Model
 {

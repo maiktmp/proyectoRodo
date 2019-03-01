@@ -85,4 +85,9 @@ class Document extends Model
         }
         return $documentOk;
     }
+
+    public function isActive()
+    {
+        return $this->fk_id_status === Status::RECHAZADO_ASESOR ? false : true;
+    }
 }

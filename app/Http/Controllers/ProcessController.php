@@ -83,6 +83,20 @@ class ProcessController extends Controller
         $processHasUserId = $request->input('update-row', null);
         $process = Process::find($processId);
 
+        $processHasUser = $process
+            ->hasUser()
+            ->whereFkIdUser($request->input('fk_id_user'))
+            ->first();
+        if ($processHasUser != null && $processHasUserId === null) {
+            $validator->getMessageBag()->add('general',
+                "Actualmente el docente "
+                . $processHasUser->user->fullname
+                . "ya se encuentra asignado a este proceso como "
+                . $processHasUser->rol->name
+            );
+            return back()->withInput()->withErrors($validator);
+        }
+
         if ($processHasUserId !== null) {
             $processHasUser = ProcessHasUser::find($processHasUserId);
         } else {

@@ -130,7 +130,9 @@
                                 <ul>
                                     @foreach($reviewers as $reviwer)
                                         <li>{{$reviwer->user->full_name}}
-                                            : {{\App\Services\DateFormatterService::fullDate($reviwer->delivery_date)}}</li>
+                                            @if($loop->parent->last	)
+                                                : {{\App\Services\DateFormatterService::fullDate($reviwer->delivery_date)}}</li>
+                                        @endif
                                     @endforeach
                                 </ul>
                             </td>

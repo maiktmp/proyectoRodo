@@ -52,6 +52,17 @@ class DatabaseSeeder extends Seeder
             'no_control' => "14280487",
             'carrera' => "Ing. en Sistemas Computacionales ",
             'fk_id_user_type' => "2",
+
+        ]);
+        DB::table('user')->insert([
+            'name' => 'Carlos',
+            'last_name' => 'Perez Perez',
+            'username' => 'alu_14280488',
+            'password' => bcrypt('pw0000'),
+            'email' => "aluItt@ittol.com.mx",
+            'no_control' => "14280487",
+            'carrera' => "Ing. en Sistemas Computacionales ",
+            'fk_id_user_type' => "2",
         ]);
         DB::table('user')->insert([
             [

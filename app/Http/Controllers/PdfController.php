@@ -20,7 +20,7 @@ class PdfController extends Controller
         $process = App\Http\Model\Process::find($processId);
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadView("pdf", ["process" => $process]);
-        return $pdf->stream();
+        return $pdf->sstream();
 //        return view('pdf', ["process" => $process]);
     }
 }
