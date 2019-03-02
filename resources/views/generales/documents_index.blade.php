@@ -123,10 +123,10 @@
                             ->documents as $document)
                         <tr class="clickable-row cursor-pointer"
                             data-href='{{route('student_document',['documentId'=>$document->id])}}'>
-                            <th scope="col">{{$loop->iteration}}</th>
-                            <td>{{$document->status->name}}</td>
-                            <td>{{\App\Services\DateFormatterService::fullDatetime($document->created_at)}}</td>
-                            <td>
+                            <th class="clickable-th" scope="col">{{$loop->iteration}}</th>
+                            <td class="clickable-th">{{$document->status->name}}</td>
+                            <td class="clickable-th">{{\App\Services\DateFormatterService::fullDatetime($document->created_at)}}</td>
+                            <td class="clickable-th">
                                 <ul>
                                     @foreach($reviewers as $reviwer)
                                         <li>{{$reviwer->user->full_name}}

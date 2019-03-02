@@ -4,6 +4,10 @@
 @extends('template.main')
 @section('navbarTitle', 'Procesos activos')
 @section('title', 'Titulación')
+@push("scripts")
+
+@endpush
+
 @section('content')
     <div class="container">
         <div class="row my-2">
@@ -103,6 +107,66 @@
                 </div>
             </div>
         </div>
+    </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Configuración de los jefes</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="form-modal" type="POST">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="fk_id_user_autocomplete" class="">Jefe de la divisón de estudios
+                                        profesionales</label>
+                                    <input class="form-control"
+                                           id="inp-autocomplete"
+                                           name="fefe_depto"
+                                           type="text"
+                                           autocomplete="off"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center">
+                                <span>Atentamente</span>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="fk_id_user_autocomplete">Nombre del responsable</label>
+                                    <input class="form-control"
+                                           id="inp-autocomplete"
+                                           name="responsable"
+                                           type="text"
+                                           autocomplete="off"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="fk_id_user_autocomplete">Cargo</label>
+                                    <input class="form-control"
+                                           id="inp-autocomplete"
+                                           name="cargo"
+                                           type="text"
+                                           autocomplete="off"
+                                           required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Generar documento</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 @endsection

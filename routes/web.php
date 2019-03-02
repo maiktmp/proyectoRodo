@@ -109,7 +109,7 @@ Route::view(
     'generales.process_teachers_index')
     ->name('teachers_index');
 
-Route::get(
+Route::post(
     'process/{processId}/status',
     'AdminController@getStatusTeachers')
     ->name('teachers_status');

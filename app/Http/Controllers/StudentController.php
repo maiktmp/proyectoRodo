@@ -43,11 +43,13 @@ class StudentController extends Controller
         ];
         if (Auth::user()->documents()->count() === 0) {
             $rules['producto'] = 'required';
+            $rules['name'] = 'required';
         }
         $validator = Validator::make(
             $request->all(),
             $rules,
             [
+                'name.required' => 'El nombre del proyecto es requerido.',
                 'producto.required' => 'Ingresa el la opción de titulación.',
                 'url.required' => 'Ingresa el docuento de word.',
                 'url.mimetypes' => 'Ingresa un archivo de word.',
@@ -89,14 +91,14 @@ class StudentController extends Controller
                     $created = true;
                 } else {
                     $process = new Process();
-                    $process->producto = \request('producto');
+                    $process->producto = strtoupper(\request('producto'));
+                    $process->name = \request('name');
                     $process->begin_date = Carbon::now();
-                    $process->hasState()->attach(State::PENDIENTE_ASESOR);
                     $process->fk_id_state = State::PENDIENTE_ASESOR;
                 }
                 $process->state_date = Carbon::now();
                 $transactionOk = $transactionOk && $process->save();
-                $process->hasState()->attach(State::PENDIENTE);
+                $process->hasState()->attach(State::PENDIENTE_ASESOR);
                 if ($transactionOk && !$created) {
                     $processHasUser = new ProcessHasUser();
                     $processHasUser->fk_id_user = $alumno->id;

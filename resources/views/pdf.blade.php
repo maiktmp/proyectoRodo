@@ -21,7 +21,7 @@
         }
     </style>
 </head>
-<body style="">
+<body style="padding-top: 30px">
 <div style="margin-top: 5px" class="col-12">
     <p class="text-center">
         <b>ANEXO III</b>
@@ -35,8 +35,8 @@
 <div style="margin-top: 5px" class="col-12">
     <p class="text-left">
         <b>
-            C. ___________________________________________ <br>
-            JEFE DE LA DICISIÓN DE ESTUDIOS PROFESIONALES <br>
+            C. {{strtoupper($jefe)}} <br>
+            JEFE DE LA DIVISIÓN DE ESTUDIOS PROFESIONALES <br>
             P R E S E N T E. <br>
         </b>
     </p>
@@ -77,27 +77,48 @@
         Agradezco de antemano su valisoso apoyo en esta importante actividad para la formación profesional de nuestros
         egresados.
     </p>
-    <p><b>A T E N T A M E N T E.</b></p>
+    <p class="text-center"><b>A T E N T A M E N T E.</b></p>
     <br><br><br><br>
 </div>
 <div style="margin-top: 5px" class="col-12">
-    <p>
-        <b>NOMBRE Y FIRMA </b> <br>
-        <b>JEFE DEL DEPARTAMENTO ACADÉMICO</b>
+    <p class="text-center">
+        <b>{{strtoupper($responsable)}}</b> <br>
+        <b>{{strtoupper($cargo)}}</b>
     </p>
 </div>
 <div style="margin-top: 5px" class="col-12">
     <table>
         <tbody>
         <tr>
-            <td style="width: 210px;  height: 100px"></td>
-            <td style="width: 210px;  height: 100px"></td>
-            <td style="width: 210px;  height: 100px"></td>
+            <td class="text-center" style="width: 210px;  height: 50px">{{$process
+            ->hasUser()
+            ->where('fk_id_rol',\App\Http\Model\Rol::ASESOR)
+            ->first()
+            ->user->full_name
+            }}</td>
+            <td class="text-center"  style="width: 210px;  height: 50px">
+                {{$process
+            ->hasUser()
+            ->where('fk_id_rol',\App\Http\Model\Rol::REVISOR)
+            ->get()
+            ->last()
+            ->user->full_name
+            }}
+            </td>
+            <td class="text-center"  style="width: 210px;  height: 50px">
+                {{$process
+           ->hasUser()
+           ->where('fk_id_rol',\App\Http\Model\Rol::REVISOR)
+           ->get()
+           ->first()
+           ->user->full_name
+           }}
+            </td>
         </tr>
         <tr>
-            <td class="text-center" style="height: 50px">Nombre y Firma del <br> Asesor</td>
-            <td class="text-center" style="height: 50px">Nombre y Firma del <br> Revisor</td>
-            <td class="text-center" style="height: 50px">Nombre y Firma del <br> Revisor</td>
+            <td class="text-center" style="height: 50px">Nombre y Firma del Asesor</td>
+            <td class="text-center" style="height: 50px">Nombre y Firma del Revisor</td>
+            <td class="text-center" style="height: 50px">Nombre y Firma del Revisor</td>
         </tr>
         </tbody>
     </table>

@@ -29,6 +29,16 @@
                         @if(Auth::user()->documents()->count()===0)
                             <div class="row">
                                 <div class="col-8 offset-2 text-left">
+                                    @include('components.form.text_group', [
+                                          'name' => 'name',
+                                          'label' => 'Nombre del proyecto',
+                                          'errors' => $errors,
+                                          'errorName' => 'name'
+                                      ])
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-8 offset-2 text-left">
                                     <div class="form-group">
                                         <label for="producto" class="">Opción de titulación
                                             <i id="tooltip"
