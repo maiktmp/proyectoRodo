@@ -46,6 +46,7 @@ class ProcessController extends Controller
         $rules = [
             'fk_id_user' => 'required',
         ];
+
         $processHasUser = ProcessHasUser::whereFkIdUser($request
             ->input('fk_id_user'))
             ->whereFkIdRol(Rol::REVISOR)
@@ -101,7 +102,7 @@ class ProcessController extends Controller
             $processHasUser = ProcessHasUser::find($processHasUserId);
         } else {
             $processHasUser = new ProcessHasUser();
-            if ($process->hasReviwer() === null) {
+            if($process->fk_id_state===State::PENDIENTE){
                 $process->hasState()->attach(State::PENDIENTE_ASESOR);
                 $process->fk_id_state = State::PENDIENTE_ASESOR;
             }

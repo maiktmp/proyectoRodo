@@ -21,10 +21,26 @@
 @push('scripts')
     <script>
         $(document).ready(function () {
+            var $rowDocument = $("#row-document");
+            var $select = $("#select_position");
+            if ($select.val() * 1 === 1) {
+                $rowDocument.hide();
+            }
+
             $('input[type="file"]').change(function (e) {
                 var fileName = e.target.files[0].name;
                 $('.lbl-doc').html(fileName);
             });
+
+            $("#select_position").change(function ($event) {
+                var option = $(this).val() * 1;
+                if (option !== 1) {
+                    $rowDocument.show();
+                } else {
+                    $rowDocument.hide();
+                }
+            });
+
         });
     </script>
 @endpush
@@ -95,11 +111,14 @@
                 </div>
             @empty
             @endforelse
+            {{--TODO VISTA DE REVISIÓNES--}}
             @if(\App\Http\Model\User::isTeacher())
-                @if( \App\Http\Model\ProcessHasUser::whereFkIdUser(Auth::user()->id)->first()->active===1
+                @if(
+                 \App\Http\Model\ProcessHasUser::whereFkIdUser(Auth::user()->id)->first()->active===1
                 && \App\Http\Model\User::canReview($document->id)
                 && $document->isActive()
                 )
+
                     <div class="col-8 offset-2 my-2">
                         <div class="card">
                             <div class="card-body">
@@ -127,7 +146,7 @@
                                        ])
                                             </div>
                                         </div>
-                                        <div class="row mt-2">
+                                        <div id="row-document" class="row mt-2">
                                             <div class="col-8 offset-2 text-left">
                                                 @include('components.form.file_group', [
                                                       'name' => 'doc_url',

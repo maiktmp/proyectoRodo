@@ -31,7 +31,7 @@
                                        href="#v-pills-profile"
                                        role="tab"
                                        aria-controls="v-pills-profile"
-                                       aria-selected="false">Pendiente de aceptar por revisor</a>
+                                       aria-selected="false">Pendiente de aceptar por asesor</a>
                                     <a class="nav-link nav-lateral"
                                        id="v-pills-messages-tab"
                                        data-toggle="pill"

@@ -94,11 +94,11 @@ class StudentController extends Controller
                     $process->producto = strtoupper(\request('producto'));
                     $process->name = \request('name');
                     $process->begin_date = Carbon::now();
-                    $process->fk_id_state = State::PENDIENTE_ASESOR;
+                    $process->fk_id_state = State::PENDIENTE;
                 }
                 $process->state_date = Carbon::now();
                 $transactionOk = $transactionOk && $process->save();
-                $process->hasState()->attach(State::PENDIENTE_ASESOR);
+                $process->hasState()->attach(State::PENDIENTE);
                 if ($transactionOk && !$created) {
                     $processHasUser = new ProcessHasUser();
                     $processHasUser->fk_id_user = $alumno->id;
@@ -165,6 +165,12 @@ class StudentController extends Controller
         return view('generales.document_view', ["document" => $document]);
     }
 
+    /**
+     * TODO POST de revisión
+     * @param Request $request
+     * @param $documentId
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function viewDocumentPost(Request $request, $documentId)
     {
         $transactionOk = true;
@@ -172,6 +178,7 @@ class StudentController extends Controller
         $docUrl = null;
         $validator = Validator::make($request->all(), [], []);
         $document = Document::find($documentId);
+
         if ($request->input('fk_id_rol') * 1 === Rol::REVISOR) {
             if (!$document->adviserReview()) {
                 $validator->getMessageBag()->add("general", "No se puedes definir tu posición hasta que el
@@ -179,7 +186,6 @@ class StudentController extends Controller
                 return back()->withErrors($validator)->withInput();
             }
         }
-
         if ($request->input('fk_id_position') * 1 === Position::RECHAZADO &&
             \request('doc_url', null) === null) {
             $validator->getMessageBag()->add("general",
@@ -189,6 +195,13 @@ class StudentController extends Controller
         $processHasUser = ProcessHasUser::whereFkIdUser(Auth::user()->id)
             ->where('fk_id_process', $document->user->processHasUsers->fk_id_process)
             ->first();
+        $process = $processHasUser->process;
+
+        if ($process->hasUser()->where('fk_id_rol', Rol::REVISOR)->count() < 2) {
+            $validator->getMessageBag()->add("general",
+                "Antes de definir tu postura, se deben asignar los revisores a el proceso");
+            return back()->withErrors($validator)->withInput();
+        }
 
         if (request('doc_url') !== null) {
             $fileOk = $request->hasFile('doc_url') &&

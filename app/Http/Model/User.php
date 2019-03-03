@@ -133,12 +133,14 @@ class User extends Authenticatable
     public static function canReview($documentId)
     {
         $userId = Auth::user()->id;
-        $count = ProcessHasUser::whereFkIdUser($userId)->count();
-        $reviews = ProcessHasDocument::whereHas('processHasUser', function ($q) use ($userId, $documentId) {
-            $q->where('fk_id_user', $userId)
-                ->where('fk_id_document', $documentId);
-        })->get()->count();
-        return $count > $reviews;
+        $document = Document::find($documentId);
+        $process = $document->user->processHasUsers->process;
+        $processHasUser = $process->hasUser()->where('fk_id_user', $userId)->first();
+
+        $reviwers = ProcessHasDocument::where('fk_id_process_has_user', $processHasUser->id)
+            ->where('fk_id_document', $documentId)->get()->count();
+
+        return $reviwers === 0;
     }
 
     public static function getTeachers()

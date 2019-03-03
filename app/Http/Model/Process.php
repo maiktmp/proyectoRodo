@@ -153,7 +153,8 @@ class Process extends Model
         return Process::whereHas('hasUser', function ($q) {
             $q->where('fk_id_user', Auth::user()->id)
                 ->where('fk_id_rol', Rol::ASESOR);
-        })->where('fk_id_state', State::PENDIENTE_ASESOR)->get();
+        })->whereIn('fk_id_state', [State::PENDIENTE_ASESOR,State::PENDIENTE])
+          ->get();
     }
 
     public static function adviserAccept()

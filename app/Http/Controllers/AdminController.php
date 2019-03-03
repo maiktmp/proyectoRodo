@@ -50,6 +50,7 @@ class AdminController extends Controller
 
     public function getStatusTeachers($processId)
     {
+
         if ($processId == 0) {
             $users = ProcessHasUser::where('active', false)
                 ->get();
