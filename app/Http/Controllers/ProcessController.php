@@ -41,17 +41,23 @@ class ProcessController extends Controller
         return view('admin.update_process', ['process' => $process]);
     }
 
+    /**
+     * TODO post profesores del proceso
+     * @param Request $request
+     * @param $processId
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function updateProcessPost(Request $request, $processId)
     {
         $rules = [
             'fk_id_user' => 'required',
         ];
 
-        $processHasUser = ProcessHasUser::whereFkIdUser($request
-            ->input('fk_id_user'))
+        $processHasUser = ProcessHasUser::whereFkIdUser($request->input('fk_id_user'))
             ->whereFkIdRol(Rol::REVISOR)
+            ->whereFkIdProcess($processId)
             ->first();
-
         if ($processHasUser !== null) {
             if ($processHasUser->delivery_date !== null) {
                 if ($request->input('fk_id_rol') * 1 === Rol::REVISOR) {
